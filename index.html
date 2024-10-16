@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen Image Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <label for="finDropdown">FIN:</label>
+            <select id="finDropdown">
+                <!-- Options will be dynamically populated using JavaScript -->
+            </select>
+            
+            <label for="crewDropdown">Crew:</label>
+            <select id="crewDropdown">
+                <!-- Options will be dynamically populated using JavaScript -->
+            </select>
+            
+            <br />
+            <div id="info">
+            </div>
+        </div>
+
+        <div class="image-container">
+            <img id="fullscreenImage" src="GTO0001.jpg" alt="Image">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
