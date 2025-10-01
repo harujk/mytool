@@ -344,53 +344,54 @@ document.addEventListener('DOMContentLoaded', function() {
         updateImageAndInfo(selectedFinCrew);
     }
 
-    // --- 이미지 및 정보를 업데이트하는 최종 함수 (FIN/Crew 선택 및 Crew 드롭다운 변경 시 호출) ---
-    function updateImageAndInfo(selectedFinCrew) {
-        if (!selectedFinCrew) return;
+// --- 이미지 및 정보를 업데이트하는 최종 함수 (FIN/Crew 선택 및 Crew 드롭다운 변경 시 호출) ---
+function updateImageAndInfo(selectedFinCrew) {
+    if (!selectedFinCrew) return;
 
-        const [finIdStr, finCrewStr] = selectedFinCrew.split('-');
-        const finId = parseInt(finIdStr, 10);
-        const finCrew = parseInt(finCrewStr, 10);
-        const crewValue = parseInt(crewDropdown.value, 10);
+    const [finIdStr, finCrewStr] = selectedFinCrew.split('-');
+    const finId = parseInt(finIdStr, 10);
+    const finCrew = parseInt(finCrewStr, 10);
+    const crewValue = parseInt(crewDropdown.value, 10); // 👈 현재 선택된 Crew 값 (0, 1, 2, 3, 4)
 
-        // 선택된 FIN ID와 Crew에 해당하는 데이터 항목 찾기 (pageNumber, lavkit, soap)
-        const selectedItem = data.find(item => item.id === finId && item.crew === finCrew);
+    // 선택된 FIN ID와 최대 Crew에 해당하는 데이터 항목 찾기
+    const selectedItem = data.find(item => item.id === finId && item.crew === finCrew);
 
-        if (!selectedItem) {
-            fullscreenImage.src = '';
-            infoDiv.textContent = 'Data not found for selection.';
-            return;
-        }
-
-        const originalPageNumber = selectedItem.pageNumber;
-
-        const offset = (finCrew === 2) ? 1 : 0;
-        const pageNumber = originalPageNumber - offset;
-        const fileNumber = pageNumber - 1;
-
-        // 이미지 이름 설정
-        const imageName = `PG${fileNumber.toString().padStart(4, '0')}.jpg`;
-        fullscreenImage.src = imageName;
-
-        // info 업데이트
-        infoDiv.textContent = `Page: ${pageNumber} | Lav Kit: ${selectedItem.lavkit === 1 ? 'T' : 'S'} | Soap: ${selectedItem.soap === 1 ? 'T' : 'S'}`;
+    if (!selectedItem) {
+        fullscreenImage.src = '';
+        infoDiv.textContent = 'Data not found for selection.';
+        return;
     }
 
-    // --- 이벤트 리스너 ---
+    const basePageNumber = selectedItem.pageNumber;
+    let offset = 0;
 
-    // 1. finDropdown 선택이 바뀔 때: Crew 옵션 갱신 및 이미지/정보 업데이트
-    finDropdown.addEventListener('change', (event) => {
-        updateSelections(event.target.value);
-    });
-
-    // 2. crewDropdown 선택이 바뀔 때: 이미지/정보만 업데이트
-    crewDropdown.addEventListener('change', () => {
-        const selectedFinCrew = finDropdown.value;
-        if (selectedFinCrew) {
-            updateImageAndInfo(selectedFinCrew);
+    // 🌟 핵심 수정: finCrew (최대 승무원) 및 crewValue (선택된 승무원)에 따른 offset 계산
+    if (finCrew === 2) {
+        // FIN 최대 Crew가 2인 경우 (협동체 A320/B737)
+        if (crewValue === 2) {
+            // 선택된 Crew가 2일 경우: pageNumber에 1을 더함
+            offset = 1;
+        } else {
+            // 선택된 Crew가 1일 경우: pageNumber는 그대로 (offset = 0)
+            offset = 0;
         }
-    });
+    } else if (finCrew >= 3) {
+        // FIN 최대 Crew가 3 또는 4인 경우 (광동체 A330/B787/B777)
+        // 선택된 crewValue (0, 1, 2, 3, 4)를 offset으로 사용
+        // (단, crewValue 0은 '-'이므로 페이지는 변동 없음)
+        offset = crewValue; 
+    }
 
-    // 초기 로드 시 실행 (필요한 경우 초기 화면을 설정하거나, placeholder를 선택 상태로 유지)
-    // 현재는 placeholder가 selected=true 이므로, 변경 이벤트가 발생하기 전까지는 아무것도 표시되지 않습니다.
-});
+    const pageNumber = basePageNumber + offset;
+
+    // 이미지 파일 번호 계산: pageNumber보다 1 작게 설정
+    // 예: Page 4 -> PG0003.jpg
+    const fileNumber = pageNumber - 1; 
+
+    // 이미지 이름 설정
+    const imageName = `PG${fileNumber.toString().padStart(4, '0')}.jpg`;
+    fullscreenImage.src = imageName;
+
+    // info 업데이트
+    infoDiv.textContent = `Page: ${pageNumber} | File: ${imageName} | Lav Kit: ${selectedItem.lavkit === 1 ? 'T' : 'S'} | Soap: ${selectedItem.soap === 1 ? 'T' : 'S'}`;
+}
