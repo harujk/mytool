@@ -345,6 +345,8 @@ document.addEventListener('DOMContentLoaded', function() {
         opt.textContent = label;
         crewDropdown.appendChild(opt);
       });
+      crewDropdown.value = 1; // Narrow 기본값
+
     } else { // Wide
       const wideOptions = [
         "Crew 3","1/3","2/3","3/3",
@@ -356,6 +358,7 @@ document.addEventListener('DOMContentLoaded', function() {
         opt.textContent = label;
         crewDropdown.appendChild(opt);
       });
+      crewDropdown.value = 4; // Wide 기본값
     }
   }
 
