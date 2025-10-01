@@ -364,13 +364,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const originalPageNumber = selectedItem.pageNumber;
 
-        // 규칙: crewDropdown의 값에 따라 pageNumber 오프셋 결정
-        // 코드를 보면 '2'일 때 +1, 그 외에는 0 입니다. 이 규칙을 그대로 따릅니다.
-        const offset = (crewValue === 2) ? 1 : 0;
+        const offset = 0;
         const pageNumber = originalPageNumber + offset;
 
         // 이미지 이름 설정
-        const imageName = `PG${pageNumber.toString().padStart(4, '0')}.jpg`;
+        const imageName = `PG${(pageNumber - 1).toString().padStart(4, '0')}.jpg`;
         fullscreenImage.src = imageName;
 
         // info 업데이트
