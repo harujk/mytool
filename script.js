@@ -246,46 +246,70 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
 
-    // --- finDropdown 채우기 (id === 0 은 placeholder로 맨 위에) ---
-    const selectItem = data.find(item => item.id === 0);
-    const otherItems = data.filter(item => item.id !== 0).sort((a, b) => a.id - b.id);
+    // --- finDropdown 채우기: ID와 Crew 수를 결합한 고유 값 사용 ---
+    // 중복 제거를 위해 Map 사용
+    const uniqueFinOptions = new Map();
 
+    data.filter(item => item.id !== 0)
+        .sort((a, b) => a.id - b.id)
+        .forEach(item => {
+            // value를 'id-crew' 형식으로 만듭니다 (예: '931-3', '931-4')
+            const value = `${item.id}-${item.crew}`;
+            // textContent에 crew 정보까지 포함합니다.
+            const textContent = `${item.id} - ${item.crew} Crews`;
+            // Map을 사용하여 고유한 옵션만 추가합니다.
+            if (!uniqueFinOptions.has(value)) {
+                uniqueFinOptions.set(value, { value, textContent });
+            }
+        });
+
+    // Placeholder 추가
+    const selectItem = data.find(item => item.id === 0);
     if (selectItem) {
         const opt = document.createElement('option');
-        opt.value = selectItem.pageNumber;
+        opt.value = ''; // Placeholder는 빈 값
         opt.textContent = 'Select FIN';
-        opt.disabled = true;   // placeholder로 비활성화
+        opt.disabled = true;
         opt.selected = true;
         finDropdown.appendChild(opt);
     }
 
-    otherItems.forEach(item => {
+    // 고유한 FIN 옵션을 드롭다운에 추가
+    uniqueFinOptions.forEach(opt => {
         const option = document.createElement('option');
-        option.value = item.pageNumber; // pageNumber를 값으로 사용
-        option.textContent = `${item.id} - ${item.crew} Crews`;
-        // 참고: 중복된 pageNumber가 있을 수 있음(원본 데이터 구조에 따름)
+        option.value = opt.value;
+        option.textContent = opt.textContent;
         finDropdown.appendChild(option);
     });
 
-    // crew 옵션 채우기 함수
-    function populateCrewOptions(crewCount) {
-        crewDropdown.innerHTML = '';
+    // --- crewDropdown 옵션을 갱신하고 이미지 및 정보 업데이트하는 통합 함수 ---
+    function updateSelections(selectedFinCrew) {
+        if (!selectedFinCrew) {
+            crewDropdown.innerHTML = '';
+            fullscreenImage.src = '';
+            infoDiv.textContent = '';
+            return;
+        }
 
+        const [finIdStr, finCrewStr] = selectedFinCrew.split('-');
+        const finId = parseInt(finIdStr, 10);
+        const finCrew = parseInt(finCrewStr, 10);
+
+        // 1. Crew 옵션 갱신
         let crewOptions = [];
-        if (crewCount === 2) {
-            // 기존 narrow 옵션 유지
+        if (finCrew === 2) {
             crewOptions = [
                 { value: '1', text: '1' },
                 { value: '2', text: '2' }
             ];
-        } else if (crewCount === 3) {
+        } else if (finCrew === 3) {
             crewOptions = [
                 { value: '0', text: '-' },
                 { value: '1', text: '1' },
                 { value: '2', text: '2' },
                 { value: '3', text: '3' }
             ];
-        } else if (crewCount === 4) {
+        } else if (finCrew === 4) {
             crewOptions = [
                 { value: '0', text: '-' },
                 { value: '1', text: '1' },
@@ -293,14 +317,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 { value: '3', text: '3' },
                 { value: '4', text: '4' }
             ];
-        } else {
-            // 안전한 기본값 (좁은 옵션)
-            crewOptions = [
-                { value: '1', text: '1' },
-                { value: '2', text: '2' }
-            ];
         }
 
+        const currentCrewValue = crewDropdown.value; // 현재 선택된 crew 값을 저장
+
+        crewDropdown.innerHTML = ''; // 기존 옵션 제거
         crewOptions.forEach(opt => {
             const el = document.createElement('option');
             el.value = opt.value;
@@ -308,78 +329,69 @@ document.addEventListener('DOMContentLoaded', function() {
             crewDropdown.appendChild(el);
         });
 
-        // 기본값을 '1'로 맞춤(있으면)
-        if ([...crewDropdown.options].some(o => o.value === '1')) {
-            crewDropdown.value = '1';
+        // crewDropdown의 기본값 설정: 이전 값이 있으면 유지, 없으면 적절한 기본값 설정
+        if ([...crewDropdown.options].some(o => o.value === currentCrewValue)) {
+            crewDropdown.value = currentCrewValue;
+        } else if (finCrew <= 2 && [...crewDropdown.options].some(o => o.value === '2')) {
+            crewDropdown.value = '2'; // 2 Crews 항공기는 기본 2
+        } else if (finCrew > 2 && [...crewDropdown.options].some(o => o.value === '0')) {
+            crewDropdown.value = '0'; // 광동체는 기본 '-'
         } else if (crewDropdown.options.length > 0) {
             crewDropdown.selectedIndex = 0;
         }
+
+        // 2. 이미지 및 정보 업데이트 (crewDropdown.value에 따라 최종 결정)
+        updateImageAndInfo(selectedFinCrew);
     }
 
-    // 이미지 업데이트 함수
-    function updateImage() {
-        const originalPageNumber = parseInt(finDropdown.value, 10);
-        if (isNaN(originalPageNumber)) {
+    // --- 이미지 및 정보를 업데이트하는 최종 함수 (FIN/Crew 선택 및 Crew 드롭다운 변경 시 호출) ---
+    function updateImageAndInfo(selectedFinCrew) {
+        if (!selectedFinCrew) return;
+
+        const [finIdStr, finCrewStr] = selectedFinCrew.split('-');
+        const finId = parseInt(finIdStr, 10);
+        const finCrew = parseInt(finCrewStr, 10);
+        const crewValue = parseInt(crewDropdown.value, 10);
+
+        // 선택된 FIN ID와 Crew에 해당하는 데이터 항목 찾기 (pageNumber, lavkit, soap)
+        const selectedItem = data.find(item => item.id === finId && item.crew === finCrew);
+
+        if (!selectedItem) {
             fullscreenImage.src = '';
-            infoDiv.textContent = '';
+            infoDiv.textContent = 'Data not found for selection.';
             return;
         }
 
-        // 규칙: crew 값이 '2' 면 page +1, 그 외엔 오프셋 0
-        const crewValue = parseInt(crewDropdown.value, 10);
+        const originalPageNumber = selectedItem.pageNumber;
+
+        // 규칙: crewDropdown의 값에 따라 pageNumber 오프셋 결정
+        // 코드를 보면 '2'일 때 +1, 그 외에는 0 입니다. 이 규칙을 그대로 따릅니다.
         const offset = (crewValue === 2) ? 1 : 0;
         const pageNumber = originalPageNumber + offset;
 
+        // 이미지 이름 설정
         const imageName = `PG${pageNumber.toString().padStart(4, '0')}.jpg`;
         fullscreenImage.src = imageName;
 
-        // info 업데이트 (lavkit/soap)
-        const selectedItem = data.find(item => item.pageNumber === originalPageNumber);
-        if (selectedItem && selectedItem.id > 0) {
-            infoDiv.textContent = `Lav Kit: ${selectedItem.lavkit === 1 ? 'T' : 'S'}  Soap: ${selectedItem.soap === 1 ? 'T' : 'S'}`;
-        } else {
-            infoDiv.textContent = '';
-        }
+        // info 업데이트
+        infoDiv.textContent = `Page: ${pageNumber} | Lav Kit: ${selectedItem.lavkit === 1 ? 'T' : 'S'} | Soap: ${selectedItem.soap === 1 ? 'T' : 'S'}`;
     }
 
-    // fin 선택이 바뀔 때 -> crew 옵션 갱신 + 이미지 갱신
-    finDropdown.addEventListener('change', () => {
-    const selectedValue = finDropdown.value;
-    const selectedItem = data.find(item => item.pageNumber == selectedValue);
+    // --- 이벤트 리스너 ---
 
-    // crewDropdown 초기화
-    crewDropdown.innerHTML = '';
-
-    let crewOptions;
-    if (selectedItem && selectedItem.crew === 2) {
-        crewOptions = [
-            { value: '1', text: '1' },
-            { value: '2', text: '2' }
-        ];
-    } else {
-        crewOptions = [
-            { value: '0', text: '-' },
-            { value: '1', text: '1' },
-            { value: '2', text: '2' },
-            { value: '3', text: '3' },
-            { value: '4', text: '4' }
-        ];
-    }
-
-    // crewDropdown에 옵션 추가
-    crewOptions.forEach(option => {
-        const crewOption = document.createElement('option');
-        crewOption.value = option.value;
-        crewOption.textContent = option.text;
-        crewDropdown.appendChild(crewOption);
+    // 1. finDropdown 선택이 바뀔 때: Crew 옵션 갱신 및 이미지/정보 업데이트
+    finDropdown.addEventListener('change', (event) => {
+        updateSelections(event.target.value);
     });
 
-    // 디폴트 선택값 설정
-    if (selectedItem) {
-        if (selectedItem.crew <= 2) {
-            crewDropdown.value = '2';
-        } else if (selectedItem.crew === 3 || selectedItem.crew === 4) {
-            crewDropdown.value = '0';
+    // 2. crewDropdown 선택이 바뀔 때: 이미지/정보만 업데이트
+    crewDropdown.addEventListener('change', () => {
+        const selectedFinCrew = finDropdown.value;
+        if (selectedFinCrew) {
+            updateImageAndInfo(selectedFinCrew);
         }
-    }
+    });
+
+    // 초기 로드 시 실행 (필요한 경우 초기 화면을 설정하거나, placeholder를 선택 상태로 유지)
+    // 현재는 placeholder가 selected=true 이므로, 변경 이벤트가 발생하기 전까지는 아무것도 표시되지 않습니다.
 });
