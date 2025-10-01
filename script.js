@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const finDropdown = document.getElementById('finDropdown');
     const crewDropdown = document.getElementById('crewDropdown');
     const fullscreenImage = document.getElementById('fullscreenImage');
-    const infoDiv = document.getElementById('info'
+    const infoDiv = document.getElementById('info'); 
     
     const data = [
     { id: 0, crew: 2, pageNumber: 1, lavkit: 1, soap: 1 },
