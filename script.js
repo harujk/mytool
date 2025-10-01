@@ -5,101 +5,368 @@ document.addEventListener('DOMContentLoaded', function() {
     const infoDiv = document.getElementById('info');
     
     const data = [
-    { id: 0, pageNumber: 1, lavkit: 1, soap: 1 }, { id: 101, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 102, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 103, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 104, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 105, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 106, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 107, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 108, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 109, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 110, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 111, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 112, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 113, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 114, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 115, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 116, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 117, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 118, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 119, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 120, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 121, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 122, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 123, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 124, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 125, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 126, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 127, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 128, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 129, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 130, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 131, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 132, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 133, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 225, pageNumber: 15, lavkit: 0, soap: 1 }, { id: 226, pageNumber: 15, lavkit: 0, soap: 1 },
-    { id: 227, pageNumber: 3, lavkit: 0, soap: 1 }, 
-    { id: 232, pageNumber: 15, lavkit: 0, soap: 1 }, { id: 235, pageNumber: 9, lavkit: 0, soap: 1 },
-    { id: 236, pageNumber: 9, lavkit: 0, soap: 1 }, { id: 237, pageNumber: 9, lavkit: 0, soap: 1 },
-    { id: 238, pageNumber: 9, lavkit: 0, soap: 1 }, { id: 239, pageNumber: 9, lavkit: 0, soap: 1 },
-    { id: 240, pageNumber: 9, lavkit: 0, soap: 1 }, { id: 241, pageNumber: 9, lavkit: 0, soap: 1 },
-    { id: 242, pageNumber: 9, lavkit: 0, soap: 1 }, { id: 243, pageNumber: 7, lavkit: 0, soap: 1 },
-    { id: 244, pageNumber: 7, lavkit: 0, soap: 1 }, { id: 245, pageNumber: 7, lavkit: 0, soap: 1 },
-    { id: 246, pageNumber: 7, lavkit: 0, soap: 1 }, { id: 247, pageNumber: 7, lavkit: 0, soap: 1 },
-    { id: 251, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 252, pageNumber: 3, lavkit: 0, soap: 1 },
-    { id: 255, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 256, pageNumber: 3, lavkit: 0, soap: 1 },
-    { id: 257, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 258, pageNumber: 5, lavkit: 0, soap: 1 },
-    { id: 259, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 260, pageNumber: 5, lavkit: 0, soap: 1 },
-    { id: 262, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 263, pageNumber: 3, lavkit: 0, soap: 1 },
-    { id: 272, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 273, pageNumber: 3, lavkit: 0, soap: 1 },
-    { id: 276, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 277, pageNumber: 3, lavkit: 0, soap: 1 },
-    { id: 278, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 279, pageNumber: 3, lavkit: 0, soap: 1 },
-    { id: 280, pageNumber: 5, lavkit: 0, soap: 1 }, { id: 281, pageNumber: 3, lavkit: 0, soap: 1 },
-    { id: 283, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 284, pageNumber: 3, lavkit: 0, soap: 1 },
-    { id: 286, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 287, pageNumber: 3, lavkit: 0, soap: 1 },
-    { id: 290, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 401, pageNumber: 9, lavkit: 0, soap: 1 },
-    { id: 402, pageNumber: 9, lavkit: 0, soap: 1 }, { id: 405, pageNumber: 9, lavkit: 0, soap: 1 },
-    { id: 415, pageNumber: 9, lavkit: 0, soap: 1 }, { id: 416, pageNumber: 15, lavkit: 0, soap: 1 },
-    { id: 417, pageNumber: 11, lavkit: 0, soap: 1 }, { id: 420, pageNumber: 11, lavkit: 0, soap: 1 },
-    { id: 421, pageNumber: 13, lavkit: 0, soap: 1 }, { id: 422, pageNumber: 13, lavkit: 0, soap: 1 },
-    { id: 451, pageNumber: 23, lavkit: 0, soap: 1 }, { id: 452, pageNumber: 23, lavkit: 0, soap: 1 },
-    { id: 453, pageNumber: 21, lavkit: 0, soap: 1 }, { id: 454, pageNumber: 21, lavkit: 0, soap: 1 },
-    { id: 455, pageNumber: 21, lavkit: 0, soap: 1 }, { id: 456, pageNumber: 21, lavkit: 0, soap: 1 },
-    { id: 457, pageNumber: 23, lavkit: 0, soap: 1 }, { id: 458, pageNumber: 21, lavkit: 0, soap: 1 },
-    { id: 459, pageNumber: 21, lavkit: 0, soap: 1 }, { id: 460, pageNumber: 21, lavkit: 0, soap: 1 },
-    { id: 461, pageNumber: 23, lavkit: 0, soap: 1 }, { id: 462, pageNumber: 21, lavkit: 0, soap: 1 },
-    { id: 463, pageNumber: 23, lavkit: 0, soap: 1 }, { id: 464, pageNumber: 23, lavkit: 0, soap: 1 },
-    { id: 465, pageNumber: 17, lavkit: 0, soap: 1 }, { id: 466, pageNumber: 17, lavkit: 0, soap: 1 },
-    { id: 467, pageNumber: 17, lavkit: 0, soap: 1 }, { id: 468, pageNumber: 19, lavkit: 0, soap: 1 },
-    { id: 469, pageNumber: 19, lavkit: 0, soap: 1 }, { id: 470, pageNumber: 19, lavkit: 0, soap: 1 },
-    { id: 471, pageNumber: 19, lavkit: 0, soap: 1 }, { id: 472, pageNumber: 19, lavkit: 0, soap: 1 },
-    { id: 473, pageNumber: 21, lavkit: 0, soap: 1 }, { id: 474, pageNumber: 19, lavkit: 0, soap: 1 },
-    { id: 475, pageNumber: 19, lavkit: 0, soap: 1 }, { id: 476, pageNumber: 19, lavkit: 0, soap: 1 },
-    { id: 477, pageNumber: 19, lavkit: 0, soap: 1 }, { id: 478, pageNumber: 19, lavkit: 0, soap: 1 },
-    { id: 479, pageNumber: 19, lavkit: 0, soap: 1 }, { id: 480, pageNumber: 19, lavkit: 0, soap: 1 },
-    { id: 481, pageNumber: 19, lavkit: 0, soap: 1 }, { id: 482, pageNumber: 19, lavkit: 0, soap: 1 },
-    { id: 483, pageNumber: 17, lavkit: 0, soap: 1 }, { id: 501, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 502, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 503, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 504, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 505, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 506, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 507, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 508, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 509, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 510, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 511, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 512, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 513, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 514, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 515, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 516, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 517, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 518, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 519, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 520, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 521, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 522, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 523, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 524, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 525, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 526, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 527, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 528, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 529, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 530, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 531, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 532, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 533, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 534, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 535, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 536, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 537, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 538, pageNumber: 27, lavkit: 1, soap: 1 }, { id: 539, pageNumber: 27, lavkit: 1, soap: 1 },
-    { id: 540, pageNumber: 27, lavkit: 1, soap: 1 }
+    { id: 0, crew: 2, pageNumber: 1, lavkit: 1, soap: 1 },
+
+//320 L1
+    { id: 235, crew: 2, pageNumber: 4, lavkit: 0, soap: 1 },
+    { id: 236, crew: 2, pageNumber: 4, lavkit: 0, soap: 1 }, { id: 237, crew: 2, pageNumber: 4, lavkit: 0, soap: 1 },
+    { id: 238, crew: 2, pageNumber: 4, lavkit: 0, soap: 1 }, { id: 239, crew: 2, pageNumber: 4, lavkit: 0, soap: 1 },
+    { id: 240, crew: 2, pageNumber: 4, lavkit: 0, soap: 1 }, { id: 241, crew: 2, pageNumber: 4, lavkit: 0, soap: 1 },
+    { id: 242, crew: 2, pageNumber: 4, lavkit: 0, soap: 1 }, { id: 401, crew: 2, pageNumber: 4, lavkit: 0, soap: 1 },
+    { id: 402, crew: 2, pageNumber: 4, lavkit: 0, soap: 1 }, { id: 405, crew: 2, pageNumber: 4, lavkit: 0, soap: 1 },
+
+//320 L2
+    { id: 417, crew: 2, pageNumber: 6, lavkit: 0, soap: 1 }, { id: 418, crew: 2, pageNumber: 6, lavkit: 0, soap: 1 },
+    { id: 419, crew: 2, pageNumber: 6, lavkit: 0, soap: 1 }, { id: 420, crew: 2, pageNumber: 6, lavkit: 0, soap: 1 },
+
+//320 L2
+    { id: 421, crew: 2, pageNumber: 8, lavkit: 0, soap: 1 }, { id: 422, crew: 2, pageNumber: 8, lavkit: 0, soap: 1 },
+
+//320 Dream
+
+//320 Jetz
+    { id: 225, crew: 2, pageNumber: 12, lavkit: 0, soap: 1 }, { id: 226, crew: 2, pageNumber: 12, lavkit: 0, soap: 1 },
+    { id: 232, crew: 2, pageNumber: 12, lavkit: 0, soap: 1 }, { id: 416, crew: 2, pageNumber: 12, lavkit: 0, soap: 1 },
+
+//321 L1
+    { id: 455, crew: 2, pageNumber: 14, lavkit: 0, soap: 1 }, { id: 456, crew: 2, pageNumber: 14, lavkit: 0, soap: 1 },
+    { id: 458, crew: 2, pageNumber: 14, lavkit: 0, soap: 1 }, { id: 459, crew: 2, pageNumber: 14, lavkit: 0, soap: 1 }, 
+    { id: 461, crew: 2, pageNumber: 14, lavkit: 0, soap: 1 }, { id: 462, crew: 2, pageNumber: 14, lavkit: 0, soap: 1 },
+    { id: 473, crew: 2, pageNumber: 14, lavkit: 0, soap: 1 }, 
+
+//321 L2
+    { id: 465, crew: 2, pageNumber: 16, lavkit: 0, soap: 1 }, { id: 466, crew: 2, pageNumber: 16, lavkit: 0, soap: 1 },
+    { id: 467, crew: 2, pageNumber: 16, lavkit: 0, soap: 1 }, 
+    { id: 483, crew: 2, pageNumber: 16, lavkit: 0, soap: 1 }, { id: 484, crew: 2, pageNumber: 16, lavkit: 0, soap: 1 },
+
+//321 Dream
+    { id: 451, crew: 2, pageNumber: 18, lavkit: 0, soap: 1 }, { id: 452, crew: 2, pageNumber: 18, lavkit: 0, soap: 1 },
+    { id: 453, crew: 2, pageNumber: 18, lavkit: 0, soap: 1 }, { id: 454, crew: 2, pageNumber: 18, lavkit: 0, soap: 1 },
+    { id: 457, crew: 2, pageNumber: 18, lavkit: 0, soap: 1 }, { id: 460, crew: 2, pageNumber: 18, lavkit: 0, soap: 1 },
+    { id: 463, crew: 2, pageNumber: 18, lavkit: 0, soap: 1 }, { id: 464, crew: 2, pageNumber: 18, lavkit: 0, soap: 1 },
+
+//321 GH
+
+//220
+    { id: 101, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 102, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 103, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 104, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 105, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 106, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 107, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 108, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 109, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 110, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 111, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 112, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 113, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 114, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 115, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 116, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 117, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 118, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 119, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 120, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 121, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 122, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 123, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 124, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 125, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 126, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 127, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 128, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 129, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 130, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 131, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 132, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 133, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 134, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 135, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 136, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 137, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 138, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 139, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 140, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 }, { id: 141, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+    { id: 142, crew: 2, pageNumber: 22, lavkit: 1, soap: 1 },
+
+//737-8 Max
+    { id: 501, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 502, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 503, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 504, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 505, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 506, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 507, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 508, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 509, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 510, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 511, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 512, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 513, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 514, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 515, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 516, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 517, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 518, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 519, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 520, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 521, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 522, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 523, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 524, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 525, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 526, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 527, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 528, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 529, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 530, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 531, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 532, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 533, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 534, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 535, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 536, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 537, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 538, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 }, { id: 539, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+    { id: 540, crew: 2, pageNumber: 24, lavkit: 1, soap: 1 },
+
+//737-8 Max Uplift
+    { id: 571, crew: 2, pageNumber: 26, lavkit: 1, soap: 1 }, { id: 572, crew: 2, pageNumber: 26, lavkit: 1, soap: 1 },
+    { id: 573, crew: 2, pageNumber: 26, lavkit: 1, soap: 1 }, { id: 574, crew: 2, pageNumber: 26, lavkit: 1, soap: 1 },
+    { id: 575, crew: 2, pageNumber: 26, lavkit: 1, soap: 1 }, { id: 576, crew: 2, pageNumber: 26, lavkit: 1, soap: 1 },
+    { id: 577, crew: 2, pageNumber: 26, lavkit: 1, soap: 1 }, { id: 578, crew: 2, pageNumber: 26, lavkit: 1, soap: 1 },
+
+//321 XLR
+
+//R319
+    { id: 255, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 }, { id: 256, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 },
+    { id: 257, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 }, { id: 259, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 },
+    { id: 262, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 }, { id: 263, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 },
+    { id: 272, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 }, { id: 273, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 },
+    { id: 276, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 }, { id: 277, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 },
+    { id: 278, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 }, { id: 279, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 },
+    { id: 281, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 },
+    { id: 283, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 }, { id: 284, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 },
+    { id: 286, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 }, { id: 287, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 },
+    { id: 290, crew: 2, pageNumber: 31, lavkit: 0, soap: 1 }, 
+
+//R320
+    { id: 243, crew: 2, pageNumber: 33, lavkit: 0, soap: 1 },
+    { id: 244, crew: 2, pageNumber: 33, lavkit: 0, soap: 1 }, { id: 245, crew: 2, pageNumber: 33, lavkit: 0, soap: 1 },
+    { id: 246, crew: 2, pageNumber: 33, lavkit: 0, soap: 1 }, { id: 247, crew: 2, pageNumber: 33, lavkit: 0, soap: 1 },
+
+//R321
+    { id: 468, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 }, { id: 469, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 },
+    { id: 470, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 }, { id: 471, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 },
+    { id: 472, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 }, { id: 474, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 },
+    { id: 475, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 }, { id: 476, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 },
+    { id: 477, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 }, { id: 478, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 },
+    { id: 479, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 }, { id: 480, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 },
+    { id: 481, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 }, { id: 482, crew: 2, pageNumber: 35, lavkit: 0, soap: 1 },
+
+
+//    { id: 251, crew: 2, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 252, crew: 2, pageNumber: 3, lavkit: 0, soap: 1 },
+//    { id: 260, crew: 2, pageNumber: 5, lavkit: 0, soap: 1 },
+//    { id: 415, crew: 2, pageNumber: 9, lavkit: 0, soap: 1 }, 
+
+
+//A330-300 Dream
+    { id: 931, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 }, { id: 932, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 },
+    { id: 933, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 }, { id: 934, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 },
+    { id: 935, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 }, { id: 936, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 },
+    { id: 937, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 }, { id: 938, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 },
+    { id: 939, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 }, { id: 940, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 },
+    { id: 941, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 }, { id: 942, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 },
+    { id: 943, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 }, { id: 944, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 },
+    { id: 945, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 }, { id: 947, crew: 3, pageNumber: 39, lavkit: 1, soap: 1 },
+
+    { id: 931, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 }, { id: 932, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 },
+    { id: 933, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 }, { id: 934, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 },
+    { id: 935, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 }, { id: 936, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 },
+    { id: 937, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 }, { id: 938, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 },
+    { id: 939, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 }, { id: 940, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 },
+    { id: 941, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 }, { id: 942, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 },
+    { id: 943, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 }, { id: 944, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 },
+    { id: 945, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 }, { id: 947, crew: 4, pageNumber: 43, lavkit: 1, soap: 1 },
+
+//A330-300 L2
+    { id: 946, crew: 3, pageNumber: 48, lavkit: 1, soap: 1 }, { id: 948, crew: 3, pageNumber: 48, lavkit: 1, soap: 1 },
+    { id: 949, crew: 3, pageNumber: 48, lavkit: 1, soap: 1 }, { id: 950, crew: 3, pageNumber: 48, lavkit: 1, soap: 1 },
+
+    { id: 946, crew: 4, pageNumber: 52, lavkit: 1, soap: 1 }, { id: 948, crew: 4, pageNumber: 52, lavkit: 1, soap: 1 },
+    { id: 949, crew: 4, pageNumber: 52, lavkit: 1, soap: 1 }, { id: 950, crew: 4, pageNumber: 52, lavkit: 1, soap: 1 },
+
+//787-8
+    { id: 801, crew: 3, pageNumber: 57, lavkit: 1, soap: 0 }, { id: 802, crew: 3, pageNumber: 57, lavkit: 1, soap: 0 },
+    { id: 803, crew: 3, pageNumber: 57, lavkit: 1, soap: 0 }, { id: 804, crew: 3, pageNumber: 57, lavkit: 1, soap: 0 },
+    { id: 805, crew: 3, pageNumber: 57, lavkit: 1, soap: 0 }, { id: 806, crew: 3, pageNumber: 57, lavkit: 1, soap: 0 },
+    { id: 807, crew: 3, pageNumber: 57, lavkit: 1, soap: 0 }, { id: 808, crew: 3, pageNumber: 57, lavkit: 1, soap: 0 },
+
+    { id: 801, crew: 4, pageNumber: 61, lavkit: 1, soap: 0 }, { id: 802, crew: 4, pageNumber: 61, lavkit: 1, soap: 0 },
+    { id: 803, crew: 4, pageNumber: 61, lavkit: 1, soap: 0 }, { id: 804, crew: 4, pageNumber: 61, lavkit: 1, soap: 0 },
+    { id: 805, crew: 4, pageNumber: 61, lavkit: 1, soap: 0 }, { id: 806, crew: 4, pageNumber: 61, lavkit: 1, soap: 0 },
+    { id: 807, crew: 4, pageNumber: 61, lavkit: 1, soap: 0 }, { id: 808, crew: 4, pageNumber: 61, lavkit: 1, soap: 0 },
+
+//787-9
+    { id: 831, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 832, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 833, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 834, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 835, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 836, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 837, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 838, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 839, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 840, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 841, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 842, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 843, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 844, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 845, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 846, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 847, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 848, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 849, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 850, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 851, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 852, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 853, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 854, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 855, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 856, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 857, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 858, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 859, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 860, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+    { id: 861, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 }, { id: 862, crew: 3, pageNumber: 66, lavkit: 1, soap: 0 },
+ 
+    { id: 831, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 832, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 833, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 834, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 835, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 836, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 837, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 838, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 839, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 840, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 841, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 842, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 843, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 844, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 845, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 846, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 847, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 848, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 849, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 850, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 851, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 852, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 853, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 854, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 855, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 856, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 857, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 858, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 859, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 860, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+    { id: 861, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 }, { id: 862, crew: 4, pageNumber: 70, lavkit: 1, soap: 0 },
+ 
+//878-10
+
+//777-200LR
+    { id: 701, crew: 3, pageNumber: 84, lavkit: 1, soap: 1 }, { id: 702, crew: 3, pageNumber: 84, lavkit: 1, soap: 1 },
+    { id: 703, crew: 3, pageNumber: 84, lavkit: 1, soap: 1 }, { id: 704, crew: 3, pageNumber: 84, lavkit: 1, soap: 1 },
+    { id: 705, crew: 3, pageNumber: 84, lavkit: 1, soap: 1 }, { id: 706, crew: 3, pageNumber: 84, lavkit: 1, soap: 1 },
+
+    { id: 701, crew: 4, pageNumber: 88, lavkit: 1, soap: 1 }, { id: 702, crew: 4, pageNumber: 88, lavkit: 1, soap: 1 },
+    { id: 703, crew: 4, pageNumber: 88, lavkit: 1, soap: 1 }, { id: 704, crew: 4, pageNumber: 88, lavkit: 1, soap: 1 },
+    { id: 705, crew: 4, pageNumber: 88, lavkit: 1, soap: 1 }, { id: 706, crew: 4, pageNumber: 88, lavkit: 1, soap: 1 },
+
+//777-300ER
+    { id: 731, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 }, { id: 732, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 },
+    { id: 733, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 }, { id: 734, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 },
+    { id: 735, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 }, { id: 736, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 },
+    { id: 737, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 }, { id: 738, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 },
+    { id: 739, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 }, { id: 740, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 },
+    { id: 741, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 }, { id: 742, crew: 3, pageNumber: 93, lavkit: 1, soap: 1 },
+
+    { id: 731, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 }, { id: 732, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 },
+    { id: 733, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 }, { id: 734, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 },
+    { id: 735, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 }, { id: 736, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 },
+    { id: 737, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 }, { id: 738, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 },
+    { id: 739, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 }, { id: 740, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 },
+    { id: 741, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 }, { id: 742, crew: 4, pageNumber: 97, lavkit: 1, soap: 1 },
+
+//777-300HD
+    { id: 743, crew: 3, pageNumber: 102, lavkit: 1, soap: 1 }, { id: 744, crew: 3, pageNumber: 102, lavkit: 1, soap: 1 },
+    { id: 745, crew: 3, pageNumber: 102, lavkit: 1, soap: 1 }, { id: 746, crew: 3, pageNumber: 102, lavkit: 1, soap: 1 },
+    { id: 747, crew: 3, pageNumber: 102, lavkit: 1, soap: 1 }, { id: 748, crew: 3, pageNumber: 102, lavkit: 1, soap: 1 },
+    { id: 749, crew: 3, pageNumber: 102, lavkit: 1, soap: 1 },
+
+    { id: 743, crew: 4, pageNumber: 106, lavkit: 1, soap: 1 }, { id: 744, crew: 4, pageNumber: 106, lavkit: 1, soap: 1 },
+    { id: 745, crew: 4, pageNumber: 106, lavkit: 1, soap: 1 }, { id: 746, crew: 4, pageNumber: 106, lavkit: 1, soap: 1 },
+    { id: 747, crew: 4, pageNumber: 106, lavkit: 1, soap: 1 }, { id: 748, crew: 4, pageNumber: 106, lavkit: 1, soap: 1 },
+    { id: 749, crew: 4, pageNumber: 106, lavkit: 1, soap: 1 }
+
     ];
 
-    // Populate FIN dropdown options
-    data.forEach(item => {
+
+    // --- finDropdown 채우기 (id === 0 은 placeholder로 맨 위에) ---
+    const selectItem = data.find(item => item.id === 0);
+    const otherItems = data.filter(item => item.id !== 0).sort((a, b) => a.id - b.id);
+
+    if (selectItem) {
+        const opt = document.createElement('option');
+        opt.value = selectItem.pageNumber;
+        opt.textContent = 'Select FIN';
+        opt.disabled = true;   // placeholder로 비활성화
+        opt.selected = true;
+        finDropdown.appendChild(opt);
+    }
+
+    otherItems.forEach(item => {
         const option = document.createElement('option');
-        option.value = item.pageNumber;
-        option.textContent = item.id === 0 ? 'Select FIN' : item.id;
+        option.value = item.pageNumber; // pageNumber를 값으로 사용
+        option.textContent = `${item.id} - ${item.crew} Crews`;
+        // 참고: 중복된 pageNumber가 있을 수 있음(원본 데이터 구조에 따름)
         finDropdown.appendChild(option);
     });
 
-    // Populate Crew dropdown options
-    const crewOptions = [
-        { value: '1', text: '1' },
-        { value: '2', text: '2' }
-    ];
-    
+    // crew 옵션 채우기 함수
+    function populateCrewOptions(crewCount) {
+        crewDropdown.innerHTML = '';
+
+        let crewOptions = [];
+        if (crewCount === 2) {
+            // 기존 narrow 옵션 유지
+            crewOptions = [
+                { value: '1', text: '1' },
+                { value: '2', text: '2' }
+            ];
+        } else if (crewCount === 3) {
+            crewOptions = [
+                { value: '0', text: '-' },
+                { value: '1', text: '1' },
+                { value: '2', text: '2' },
+                { value: '3', text: '3' }
+            ];
+        } else if (crewCount === 4) {
+            crewOptions = [
+                { value: '0', text: '-' },
+                { value: '1', text: '1' },
+                { value: '2', text: '2' },
+                { value: '3', text: '3' },
+                { value: '4', text: '4' }
+            ];
+        } else {
+            // 안전한 기본값 (좁은 옵션)
+            crewOptions = [
+                { value: '1', text: '1' },
+                { value: '2', text: '2' }
+            ];
+        }
+
+        crewOptions.forEach(opt => {
+            const el = document.createElement('option');
+            el.value = opt.value;
+            el.textContent = opt.text;
+            crewDropdown.appendChild(el);
+        });
+
+        // 기본값을 '1'로 맞춤(있으면)
+        if ([...crewDropdown.options].some(o => o.value === '1')) {
+            crewDropdown.value = '1';
+        } else if (crewDropdown.options.length > 0) {
+            crewDropdown.selectedIndex = 0;
+        }
+    }
+
+    // 이미지 업데이트 함수
+    function updateImage() {
+        const originalPageNumber = parseInt(finDropdown.value, 10);
+        if (isNaN(originalPageNumber)) {
+            fullscreenImage.src = '';
+            infoDiv.textContent = '';
+            return;
+        }
+
+        // 규칙: crew 값이 '2' 면 page +1, 그 외엔 오프셋 0
+        const crewValue = parseInt(crewDropdown.value, 10);
+        const offset = (crewValue === 2) ? 1 : 0;
+        const pageNumber = originalPageNumber + offset;
+
+        const imageName = `PG${pageNumber.toString().padStart(4, '0')}.jpg`;
+        fullscreenImage.src = imageName;
+
+        // info 업데이트 (lavkit/soap)
+        const selectedItem = data.find(item => item.pageNumber === originalPageNumber);
+        if (selectedItem && selectedItem.id > 0) {
+            infoDiv.textContent = `Lav Kit: ${selectedItem.lavkit === 1 ? 'T' : 'S'}  Soap: ${selectedItem.soap === 1 ? 'T' : 'S'}`;
+        } else {
+            infoDiv.textContent = '';
+        }
+    }
+
+    // fin 선택이 바뀔 때 -> crew 옵션 갱신 + 이미지 갱신
+    finDropdown.addEventListener('change', () => {
+    const selectedValue = finDropdown.value;
+    const selectedItem = data.find(item => item.pageNumber == selectedValue);
+
+    // crewDropdown 초기화
+    crewDropdown.innerHTML = '';
+
+    let crewOptions;
+    if (selectedItem && selectedItem.crew === 2) {
+        crewOptions = [
+            { value: '1', text: '1' },
+            { value: '2', text: '2' }
+        ];
+    } else {
+        crewOptions = [
+            { value: '0', text: '-' },
+            { value: '1', text: '1' },
+            { value: '2', text: '2' },
+            { value: '3', text: '3' },
+            { value: '4', text: '4' }
+        ];
+    }
+
+    // crewDropdown에 옵션 추가
     crewOptions.forEach(option => {
         const crewOption = document.createElement('option');
         crewOption.value = option.value;
@@ -107,37 +374,12 @@ document.addEventListener('DOMContentLoaded', function() {
         crewDropdown.appendChild(crewOption);
     });
 
-    // Set default value for Crew dropdown
-    crewDropdown.value = '1';
-
-    // Update image when FIN or Crew dropdown changes
-    function updateImage() {
-        let originalPageNumber = parseInt(finDropdown.value);
-        let pageNumber = originalPageNumber;
-        if (crewDropdown.value === '2') {
-            pageNumber += 1;
-        }
-        const imageName = `PG${pageNumber.toString().padStart(4, '0')}.jpeg`;
-        fullscreenImage.src = imageName;
-
-        // Find corresponding data entry
-        const selectedItem = data.find(item => item.pageNumber === originalPageNumber);
-
-        // Update infoDiv with lavkit and soap info
-        if (selectedItem) {
-            if (selectedItem.id > 0) {
-                infoDiv.textContent = `Lav Kit: ${selectedItem.lavkit === 1 ? 'T' : 'S'} Soap: ${selectedItem.soap === 1 ? 'T' : 'S'}`;
-            } else {
-                infoDiv.textContent = ''; // Clear if no matching item found
-            }            
-        } else {
-            infoDiv.textContent = ''; // Clear if no matching item found
+    // 디폴트 선택값 설정
+    if (selectedItem) {
+        if (selectedItem.crew <= 2) {
+            crewDropdown.value = '2';
+        } else if (selectedItem.crew === 3 || selectedItem.crew === 4) {
+            crewDropdown.value = '0';
         }
     }
-
-    finDropdown.addEventListener('change', updateImage);
-    crewDropdown.addEventListener('change', updateImage);
-
-    // Initial image load
-    updateImage();
 });
