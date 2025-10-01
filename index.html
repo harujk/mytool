@@ -327,6 +327,8 @@ document.addEventListener('DOMContentLoaded', function() {
       option.value = item.id;
       option.textContent = (item.id > 0) ? item.id : "";
       option.dataset.pageNumber = item.pageNumber;
+      option.dataset.lavkit = item.lavkit;
+      option.dataset.soap = item.soap;
       finDropdown.appendChild(option);
     });
   }
@@ -368,8 +370,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const filename = "PG" + finalPage.toString().padStart(4, "0") + ".jpg";
     fullscreenImage.src = filename;
 
-    infoDiv.textContent = `Lav Kit: ${findOption.dataset.lavkit === 1 ? 'T' : 'S'} | Soap: ${findOption.dataset.lavkit === 1 ? 'T' : 'S'}`;
-  }
+    infoDiv.textContent = `Lav Kit: ${finOption.dataset.lavkit === "1" ? 'T' : 'S'} | Soap: ${finOption.dataset.soap === "1" ? 'T' : 'S'}`;
+}
 
   modeSwitch.addEventListener('change', () => {
     currentMode = modeSwitch.checked ? "Wide" : "Narrow";
