@@ -392,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fullscreenImage.src = imageName;
 
         // 5. info 업데이트
-        infoDiv.textContent = `Page: ${pageNumber} | File: ${imageName} | Lav Kit: ${selectedItem.lavkit === 1 ? 'T' : 'S'} | Soap: ${selectedItem.soap === 1 ? 'T' : 'S'}`;
+        infoDiv.textContent = `v001 Page: ${pageNumber} | File: ${imageName} | Lav Kit: ${selectedItem.lavkit === 1 ? 'T' : 'S'} | Soap: ${selectedItem.soap === 1 ? 'T' : 'S'}`;
     }
 
     // --- 4. 이벤트 리스너 등록 (가장 중요한 수정 부분) ---
