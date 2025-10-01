@@ -4,25 +4,31 @@
 <meta charset="UTF-8">
 <title>FIN Crew Selector</title>
 <style>
-  body { font-family: Arial, sans-serif; text-align: center; }
+  body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
 
   /* 스위치 컨테이너 */
+  .switch-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  /* 스위치 */
   .switch {
     position: relative;
     display: inline-block;
-    width: 100px;
+    width: 80px;
     height: 34px;
-    margin: 10px;
+    margin: 0 10px;
   }
 
-  /* 숨김 라디오 버튼 */
   .switch input {
     opacity: 0;
     width: 0;
     height: 0;
   }
 
-  /* 슬라이더 */
   .slider {
     position: absolute;
     cursor: pointer;
@@ -30,22 +36,25 @@
     background-color: #ccc;
     transition: 0.4s;
     border-radius: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
   }
 
   .slider:before {
     position: absolute;
-    content: "Narrow";
+    content: "";
     height: 26px;
-    width: 46px;
+    width: 36px;
     left: 4px;
     bottom: 4px;
     background-color: white;
-    text-align: center;
-    line-height: 26px;
-    color: black;
-    font-weight: bold;
-    border-radius: 26px;
     transition: 0.4s;
+    border-radius: 34px;
   }
 
   input:checked + .slider {
@@ -54,35 +63,47 @@
 
   input:checked + .slider:before {
     transform: translateX(46px);
-    content: "Wide";
   }
 
-  select { margin: 10px; padding: 5px; }
-  img { max-width: 90%; margin-top: 20px; border: 1px solid #ccc; }
+  /* 드롭다운 한 줄 배치 */
+  .dropdown-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
 
+  select { padding: 5px; font-size: 14px; }
+
+  img { max-width: 90%; border: 1px solid #ccc; margin-top: 20px; }
 </style>
 </head>
 <body>
 
-  <!-- 1. 스위치 -->
-  <label class="switch">
-    <input type="checkbox" id="modeSwitch">
-    <span class="slider"></span>
-  </label>
+  <!-- 1. Narrow/Wide 스위치 -->
+  <div class="switch-container">
+    <label class="switch">
+      <input type="checkbox" id="modeSwitch">
+      <span class="slider" id="sliderText">Narrow | Wide</span>
+    </label>
+  </div>
 
-  <!-- 2. FIN Dropdown -->
-  <div>
-    <label for="finDropdown">FIN:</label>
-    <select id="finDropdown">
-      <option value="">-- Select FIN --</option>
-    </select>
+  <!-- 2. FIN & Crew Dropdown 한 줄 -->
+  <div class="dropdown-container">
+    <div>
+      <label for="finDropdown">FIN:</label>
+      <select id="finDropdown">
+        <option value="">-- Select FIN --</option>
+      </select>
+    </div>
 
-
-  <!-- 3. Crew Dropdown -->
-    <label for="crewDropdown">Crew:</label>
-    <select id="crewDropdown">
-      <option value="">-- Select Crew --</option>
-    </select>
+    <div>
+      <label for="crewDropdown">Crew:</label>
+      <select id="crewDropdown">
+        <option value="">-- Select Crew --</option>
+      </select>
+    </div>
   </div>
 
   <!-- 4. 이미지 표시 -->
@@ -92,13 +113,14 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const modeRadios = document.querySelectorAll('input[name="mode"]');
+  const modeSwitch = document.getElementById('modeSwitch');
+  const sliderText = document.getElementById('sliderText');
   const finDropdown = document.getElementById('finDropdown');
   const crewDropdown = document.getElementById('crewDropdown');
   const fullscreenImage = document.getElementById('fullscreenImage');
 
   // 샘플 데이터 (id = FIN 값, pageNumber = 기본 번호)
-    const data = [
+  const data = [
     { id: 0, crew: 2, pageNumber: 1, lavkit: 1, soap: 1 },
 
 //320 L1
@@ -348,24 +370,17 @@ document.addEventListener('DOMContentLoaded', function() {
     fullscreenImage.src = filename;
   }
 
-  // 이벤트 바인딩
-  modeRadios.forEach(radio => {
-    radio.addEventListener('change', function() {
-      currentMode = this.value;
-      populateFinOptions();
-      crewDropdown.innerHTML = '<option value="">-- Select Crew --</option>';
-      fullscreenImage.src = "PG0000.jpg";
-    });
-  });
-
-  finDropdown.addEventListener('change', () => {
-    populateCrewOptions();
+  modeSwitch.addEventListener('change', () => {
+    currentMode = modeSwitch.checked ? "Wide" : "Narrow";
+    sliderText.textContent = currentMode + " | " + (currentMode === "Narrow" ? "Wide" : "Narrow");
+    populateFinOptions();
+    crewDropdown.innerHTML = '<option value="">-- Select Crew --</option>';
     fullscreenImage.src = "PG0000.jpg";
   });
 
+  finDropdown.addEventListener('change', populateCrewOptions);
   crewDropdown.addEventListener('change', updateImage);
 
-  // 초기 로드
   populateFinOptions();
 });
 </script>
