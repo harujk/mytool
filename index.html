@@ -1,26 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>FIN Crew Selector</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; }
-    select, input[type="radio"] { margin: 10px; padding: 5px; }
-    img { max-width: 90%; margin-top: 20px; border: 1px solid #ccc; }
-  </style>
+<meta charset="UTF-8">
+<title>FIN Crew Selector</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; }
+
+  /* 스위치 컨테이너 */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 34px;
+    margin: 10px;
+  }
+
+  /* 숨김 라디오 버튼 */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* 슬라이더 */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "Narrow";
+    height: 26px;
+    width: 46px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    text-align: center;
+    line-height: 26px;
+    color: black;
+    font-weight: bold;
+    border-radius: 26px;
+    transition: 0.4s;
+  }
+
+  input:checked + .slider {
+    background-color: #66bb6a;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(46px);
+    content: "Wide";
+  }
+
+  select { margin: 10px; padding: 5px; }
+  img { max-width: 90%; margin-top: 20px; border: 1px solid #ccc; }
+
+</style>
 </head>
 <body>
 
-  <!-- 1. Toggle Switch -->
-  <div>
-    <label><input type="radio" name="mode" value="Narrow" checked> Narrow</label>
-    <label><input type="radio" name="mode" value="Wide"> Wide</label>
+  <!-- 1. 스위치 -->
+  <label class="switch">
+    <input type="checkbox" id="modeSwitch">
+    <span class="slider"></span>
+  </label>
 
   <!-- 2. FIN Dropdown -->
+  <div>
     <label for="finDropdown">FIN:</label>
     <select id="finDropdown">
       <option value="">-- Select FIN --</option>
     </select>
+
 
   <!-- 3. Crew Dropdown -->
     <label for="crewDropdown">Crew:</label>
@@ -29,7 +85,7 @@
     </select>
   </div>
 
-  <!-- 4. Image Display -->
+  <!-- 4. 이미지 표시 -->
   <div>
     <img id="fullscreenImage" src="PG0000.jpg" alt="Selected Page">
   </div>
