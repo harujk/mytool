@@ -366,9 +366,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const offset = (finCrew === 2) ? 1 : 0;
         const pageNumber = originalPageNumber - offset;
+        const fileNumber = pageNumber - 1;
 
         // 이미지 이름 설정
-        const imageName = `PG${(pageNumber - 1).toString().padStart(4, '0')}.jpg`;
+        const imageName = `PG${fileNumber.toString().padStart(4, '0')}.jpg`;
         fullscreenImage.src = imageName;
 
         // info 업데이트
