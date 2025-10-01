@@ -103,6 +103,8 @@
       <option value="">-- Select Crew --</option>
     </select>
   </div>
+
+  <div id="info" style="margin-top:10px; font-weight:bold;"></div>
 </div>
 
   <!-- 3. 이미지 표시 -->
@@ -362,6 +364,9 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       crewDropdown.value = 4; // Wide 기본값
     }
+
+    // FIN 선택 후 기본값으로 이미지 + info 표시
+    updateImage();
   }
 
   // 이미지 업데이트
