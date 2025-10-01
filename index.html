@@ -116,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const finDropdown = document.getElementById('finDropdown');
   const crewDropdown = document.getElementById('crewDropdown');
   const fullscreenImage = document.getElementById('fullscreenImage');
+  const infoDiv = document.getElementById('info'); 
 
   // 샘플 데이터 (id = FIN 값, pageNumber = 기본 번호)
   const data = [
@@ -366,6 +367,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const finalPage = basePage + parseInt(crewIndex, 10) - 1;
     const filename = "PG" + finalPage.toString().padStart(4, "0") + ".jpg";
     fullscreenImage.src = filename;
+
+    infoDiv.textContent = `Lav Kit: ${findOption.dataset.lavkit === 1 ? 'T' : 'S'} | Soap: ${findOption.dataset.lavkit === 1 ? 'T' : 'S'}`;
   }
 
   modeSwitch.addEventListener('change', () => {
@@ -373,6 +376,7 @@ document.addEventListener('DOMContentLoaded', function() {
     populateFinOptions();
     crewDropdown.innerHTML = '<option value="">-- Select Crew --</option>';
     fullscreenImage.src = "PG0000.jpg";
+    infoDiv.textContent = '';
   });
 
   finDropdown.addEventListener('change', populateCrewOptions);
