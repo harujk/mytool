@@ -288,15 +288,19 @@ document.addEventListener('DOMContentLoaded', function() {
   // FIN 옵션 채우기
   function populateFinOptions() {
     finDropdown.innerHTML = '<option value="">-- Select FIN --</option>';
-    data.forEach(item => {
-      if ((currentMode === "Narrow" && item.id < 700) ||
-          (currentMode === "Wide" && item.id >= 700)) {
-        const option = document.createElement('option');
-        option.value = item.id;
-        option.textContent = item.id;
-        option.dataset.pageNumber = item.pageNumber;
-        finDropdown.appendChild(option);
-      }
+    
+    // 데이터 필터 + 정렬
+    const filtered = data
+      .filter(item => (currentMode === "Narrow" && item.id < 700) ||
+                      (currentMode === "Wide" && item.id >= 700))
+      .sort((a, b) => a.id - b.id); // 오름차순
+
+    filtered.forEach(item => {
+      const option = document.createElement('option');
+      option.value = item.id;
+      option.textContent = (item.id > 0) ? item.id : "";
+      option.dataset.pageNumber = item.pageNumber;
+      finDropdown.appendChild(option);
     });
   }
 
