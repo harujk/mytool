@@ -323,13 +323,15 @@ document.addEventListener('DOMContentLoaded', function() {
       .sort((a, b) => a.id - b.id); // 오름차순
 
     filtered.forEach(item => {
-      const option = document.createElement('option');
-      option.value = item.id;
-      option.textContent = (item.id > 0) ? item.id : "";
-      option.dataset.pageNumber = item.pageNumber;
-      option.dataset.lavkit = item.lavkit;
-      option.dataset.soap = item.soap;
-      finDropdown.appendChild(option);
+      if (item.id > 0) {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item.id;
+        option.dataset.pageNumber = item.pageNumber;
+        option.dataset.lavkit = item.lavkit;
+        option.dataset.soap = item.soap;
+        finDropdown.appendChild(option);
+      }
     });
   }
 
