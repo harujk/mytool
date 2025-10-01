@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const finDropdown = document.getElementById('finDropdown');
     const crewDropdown = document.getElementById('crewDropdown');
     const fullscreenImage = document.getElementById('fullscreenImage');
-    const infoDiv = document.getElementById('info');
+    const infoDiv = document.getElementById('info'
     
     const data = [
     { id: 0, crew: 2, pageNumber: 1, lavkit: 1, soap: 1 },
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
 
-    // --- finDropdown 채우기: ID와 Crew 수를 결합한 고유 값 사용 ---
+    // --- 1. FIN 드롭다운 채우기 (초기 로드 시) ---
     // 중복 제거를 위해 Map 사용
     const uniqueFinOptions = new Map();
 
@@ -282,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
         finDropdown.appendChild(option);
     });
 
-    // --- crewDropdown 옵션을 갱신하고 이미지 및 정보 업데이트하는 통합 함수 ---
+    // --- 2. Crew 옵션 갱신 및 이미지 업데이트 통합 함수 (FIN 변경 시 호출) ---
     function updateSelections(selectedFinCrew) {
         if (!selectedFinCrew) {
             crewDropdown.innerHTML = '';
@@ -292,10 +292,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const [finIdStr, finCrewStr] = selectedFinCrew.split('-');
-        const finId = parseInt(finIdStr, 10);
         const finCrew = parseInt(finCrewStr, 10);
 
-        // 1. Crew 옵션 갱신
+        // Crew 옵션 설정
         let crewOptions = [];
         if (finCrew === 2) {
             crewOptions = [
@@ -319,8 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ];
         }
 
-        const currentCrewValue = crewDropdown.value; // 현재 선택된 crew 값을 저장
-
+        // Crew 드롭다운 옵션 갱신
         crewDropdown.innerHTML = ''; // 기존 옵션 제거
         crewOptions.forEach(opt => {
             const el = document.createElement('option');
@@ -329,69 +327,85 @@ document.addEventListener('DOMContentLoaded', function() {
             crewDropdown.appendChild(el);
         });
 
-        // crewDropdown의 기본값 설정: 이전 값이 있으면 유지, 없으면 적절한 기본값 설정
-        if ([...crewDropdown.options].some(o => o.value === currentCrewValue)) {
-            crewDropdown.value = currentCrewValue;
-        } else if (finCrew <= 2 && [...crewDropdown.options].some(o => o.value === '2')) {
-            crewDropdown.value = '2'; // 2 Crews 항공기는 기본 2
-        } else if (finCrew > 2 && [...crewDropdown.options].some(o => o.value === '0')) {
-            crewDropdown.value = '0'; // 광동체는 기본 '-'
+        // Crew Dropdown의 기본값 설정
+        if (finCrew === 2) {
+            // 2 Crews 항공기는 기본 '2' 선택
+            crewDropdown.value = '2';
+        } else if (finCrew >= 3) {
+            // 3/4 Crews 항공기는 기본 '-' (value '0') 선택
+            crewDropdown.value = '0';
         } else if (crewDropdown.options.length > 0) {
+            // 그 외의 경우 첫 번째 옵션을 기본값으로 설정 (안전장치)
             crewDropdown.selectedIndex = 0;
         }
 
-        // 2. 이미지 및 정보 업데이트 (crewDropdown.value에 따라 최종 결정)
+        // 이미지 및 정보 업데이트 호출
         updateImageAndInfo(selectedFinCrew);
     }
 
-// --- 이미지 및 정보를 업데이트하는 최종 함수 (FIN/Crew 선택 및 Crew 드롭다운 변경 시 호출) ---
-function updateImageAndInfo(selectedFinCrew) {
-    if (!selectedFinCrew) return;
+    // --- 3. 이미지 및 정보를 업데이트하는 최종 함수 (핵심 로직) ---
+    function updateImageAndInfo(selectedFinCrew) {
+        if (!selectedFinCrew) return;
 
-    const [finIdStr, finCrewStr] = selectedFinCrew.split('-');
-    const finId = parseInt(finIdStr, 10);
-    const finCrew = parseInt(finCrewStr, 10);
-    const crewValue = parseInt(crewDropdown.value, 10); // 👈 현재 선택된 Crew 값 (0, 1, 2, 3, 4)
+        const [finIdStr, finCrewStr] = selectedFinCrew.split('-');
+        const finId = parseInt(finIdStr, 10);
+        const finCrew = parseInt(finCrewStr, 10);
+        // String 값을 정수로 변환. '0'도 0으로, '1'은 1, '2'는 2로 변환.
+        const crewValue = parseInt(crewDropdown.value, 10); 
 
-    // 선택된 FIN ID와 최대 Crew에 해당하는 데이터 항목 찾기
-    const selectedItem = data.find(item => item.id === finId && item.crew === finCrew);
+        // 1. 선택된 FIN ID와 최대 Crew에 해당하는 기본 데이터 항목 찾기
+        const selectedItem = data.find(item => item.id === finId && item.crew === finCrew);
 
-    if (!selectedItem) {
-        fullscreenImage.src = '';
-        infoDiv.textContent = 'Data not found for selection.';
-        return;
-    }
-
-    const basePageNumber = selectedItem.pageNumber;
-    let offset = 0;
-
-    // 🌟 핵심 수정: finCrew (최대 승무원) 및 crewValue (선택된 승무원)에 따른 offset 계산
-    if (finCrew === 2) {
-        // FIN 최대 Crew가 2인 경우 (협동체 A320/B737)
-        if (crewValue === 2) {
-            // 선택된 Crew가 2일 경우: pageNumber에 1을 더함
-            offset = 1;
-        } else {
-            // 선택된 Crew가 1일 경우: pageNumber는 그대로 (offset = 0)
-            offset = 0;
+        if (!selectedItem) {
+            fullscreenImage.src = '';
+            infoDiv.textContent = 'Data not found for selection.';
+            return;
         }
-    } else if (finCrew >= 3) {
-        // FIN 최대 Crew가 3 또는 4인 경우 (광동체 A330/B787/B777)
-        // 선택된 crewValue (0, 1, 2, 3, 4)를 offset으로 사용
-        // (단, crewValue 0은 '-'이므로 페이지는 변동 없음)
-        offset = crewValue; 
+
+        const basePageNumber = selectedItem.pageNumber;
+        let offset = 0;
+
+        // 2. 페이지 오프셋 (Offset) 계산 로직
+        if (finCrew === 2) {
+            // FIN 최대 Crew가 2인 경우 (협동체)
+            if (crewValue === 2) {
+                // Crew 2 선택 시: basePageNumber에 1을 더함
+                offset = 1;
+            } else {
+                // Crew 1 선택 시: basePageNumber 그대로
+                offset = 0;
+            }
+        } else if (finCrew >= 3) {
+            // FIN 최대 Crew가 3 또는 4인 경우 (광동체)
+            // 선택된 crewValue (0, 1, 2, 3, 4)를 offset으로 사용
+            offset = crewValue; 
+        }
+
+        const pageNumber = basePageNumber + offset;
+
+        // 3. 이미지 파일 번호 계산: pageNumber보다 1 작게 설정 (사용자 요청 반영)
+        // 예: Page 4 -> PG0003.jpg
+        const fileNumber = pageNumber - 1; 
+
+        // 4. 이미지 이름 설정 및 표시
+        const imageName = `PG${fileNumber.toString().padStart(4, '0')}.jpg`;
+        fullscreenImage.src = imageName;
+
+        // 5. info 업데이트
+        infoDiv.textContent = `Page: ${pageNumber} | File: ${imageName} | Lav Kit: ${selectedItem.lavkit === 1 ? 'T' : 'S'} | Soap: ${selectedItem.soap === 1 ? 'T' : 'S'}`;
     }
 
-    const pageNumber = basePageNumber + offset;
+    // --- 4. 이벤트 리스너 등록 (가장 중요한 수정 부분) ---
 
-    // 이미지 파일 번호 계산: pageNumber보다 1 작게 설정
-    // 예: Page 4 -> PG0003.jpg
-    const fileNumber = pageNumber - 1; 
+    // 1. FIN 드롭다운 변경 시: Crew 옵션을 갱신하고 이미지 업데이트
+    finDropdown.addEventListener('change', function() {
+        updateSelections(this.value);
+    });
 
-    // 이미지 이름 설정
-    const imageName = `PG${fileNumber.toString().padStart(4, '0')}.jpg`;
-    fullscreenImage.src = imageName;
-
-    // info 업데이트
-    infoDiv.textContent = `Page: ${pageNumber} | File: ${imageName} | Lav Kit: ${selectedItem.lavkit === 1 ? 'T' : 'S'} | Soap: ${selectedItem.soap === 1 ? 'T' : 'S'}`;
-}
+    // 2. Crew 드롭다운 변경 시: 이미지 및 정보만 업데이트 (FIN 값을 넘겨줌)
+    crewDropdown.addEventListener('change', function() {
+        if (finDropdown.value) {
+            updateImageAndInfo(finDropdown.value);
+        }
+    });
+});
