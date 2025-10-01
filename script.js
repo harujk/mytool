@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const originalPageNumber = selectedItem.pageNumber;
 
-        const offset = 0;
+        const offset = (finCrew === 2) ? -1 : 0;
         const pageNumber = originalPageNumber + offset;
 
         // 이미지 이름 설정
