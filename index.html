@@ -79,32 +79,29 @@
 </head>
 <body>
 
-  <!-- 1. Narrow/Wide 스위치 -->
-  <div class="switch-container">
-    <span class="switch-label">Narrow</span>
-    <label class="switch">
-      <input type="checkbox" id="modeSwitch">
-      <span class="slider"></span>
-    </label>
-    <span class="switch-label">Wide</span>
+<div class="dropdown-container">
+  <!-- Narrow/Wide 스위치 -->
+  <label class="switch">
+    <input type="checkbox" id="modeSwitch">
+    <span class="slider" id="sliderText">Narrow | Wide</span>
+  </label>
+
+  <!-- FIN Dropdown -->
+  <div>
+    <label for="finDropdown">FIN:</label>
+    <select id="finDropdown">
+      <option value="">-- Select FIN --</option>
+    </select>
   </div>
 
-  <!-- 2. FIN & Crew Dropdown 한 줄 -->
-  <div class="dropdown-container">
-    <div>
-      <label for="finDropdown">FIN:</label>
-      <select id="finDropdown">
-        <option value="">-- Select FIN --</option>
-      </select>
-    </div>
-
-    <div>
-      <label for="crewDropdown">Crew:</label>
-      <select id="crewDropdown">
-        <option value="">-- Select Crew --</option>
-      </select>
-    </div>
+  <!-- Crew Dropdown -->
+  <div>
+    <label for="crewDropdown">Crew:</label>
+    <select id="crewDropdown">
+      <option value="">-- Select Crew --</option>
+    </select>
   </div>
+</div>
 
   <!-- 3. 이미지 표시 -->
   <div>
