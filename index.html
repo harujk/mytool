@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!finOption || crewIndex === "") return;
 
     const basePage = parseInt(finOption.dataset.pageNumber, 10);
-    const finalPage = basePage + parseInt(crewIndex, 10) - 1;
+    const finalPage = basePage + parseInt(crewIndex, 10);
     const filename = "PG" + finalPage.toString().padStart(4, "0") + ".jpeg";
     fullscreenImage.src = filename;
 
