@@ -2,25 +2,58 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Crucial for mobile scaling -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>FIN Crew Selector</title>
 <style>
-  body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+  /* High-contrast, dark-themed styling with mobile-optimized text */
+  body { 
+    font-family: Arial, sans-serif; 
+    text-align: center; 
+    margin: 0;
+    padding: 50px 15px 20px 15px; /* Added padding to clear the top-right date */
+    background-color: #121212;
+    color: #ffffff;
+    font-size: 18px;
+  }
 
-  /* 스위치 컨테이너 */
+  /* Last Updated Text in Top Right Corner */
+  .last-updated {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 12px;
+    color: #888;
+  }
+
+  /* Mobile-First Dropdown Layout (Vertical Stacking) */
+  .dropdown-container {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically for thumbs */
+    align-items: stretch;
+    gap: 20px;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    border: 1px solid #333;
+    max-width: 500px;
+    margin: 0 auto 20px auto;
+  }
+
+  /* Keep the switch horizontal and centered */
   .switch-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
-    gap: 10px;
+    gap: 15px;
   }
 
   .switch-label {
     font-weight: bold;
-    margin: 0 5px;
+    font-size: 18px;
   }
 
-  /* 스위치 */
+  /* Switch Styling */
   .switch {
     position: relative;
     display: inline-block;
@@ -38,7 +71,7 @@
     position: absolute;
     cursor: pointer;
     top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #ccc;
+    background-color: #555;
     transition: 0.4s;
     border-radius: 34px;
   }
@@ -56,301 +89,208 @@
   }
 
   input:checked + .slider {
-    background-color: #66bb6a;
+    background-color: #4CAF50;
   }
 
   input:checked + .slider:before {
     transform: translateX(26px);
   }
 
-  /* 드롭다운 한 줄 배치 */
-  .dropdown-container {
+  /* Input Groups inside Container */
+  .input-group {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
+    flex-direction: column;
+    align-items: flex-start; /* Align label to left */
+    width: 100%;
   }
 
-  select { padding: 5px; font-size: 14px; }
+  label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #ccc;
+  }
 
-  img { max-width: 90%; border: 1px solid #ccc; margin-top: 20px; }
+  /* Fat dropdowns for easy tapping */
+  select { 
+    width: 100%; /* Full width */
+    box-sizing: border-box;
+    padding: 14px; 
+    font-size: 18px; 
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border: 1px solid #555;
+    border-radius: 8px;
+    appearance: none; /* Removes default OS styling for a cleaner look */
+  }
+
+  /* Image Display */
+  img { 
+    max-width: 100%; 
+    border: 2px solid #444; 
+    border-radius: 8px;
+    margin-top: 10px; 
+  }
+
+  #info {
+    margin-top: 5px; 
+    font-weight: bold;
+    font-size: 22px;
+    color: #4CAF50;
+    text-align: center;
+    width: 100%;
+  }
 </style>
 </head>
 <body>
 
+<!-- Update this date whenever you modify the arrays -->
+<div class="last-updated">Last updated: April 17, 2026</div>
 
 <div class="dropdown-container">
-  <!-- Narrow/Wide 스위치 -->
-  <span>Narrow</span>
-  <label class="switch">
-    <input type="checkbox" id="modeSwitch">
-    <span class="slider"></span>
-  </label>
-  <span>Wide</span>
+  <!-- Narrow/Wide Switch -->
+  <div class="switch-container">
+    <span class="switch-label">Narrow</span>
+    <label class="switch">
+      <input type="checkbox" id="modeSwitch">
+      <span class="slider"></span>
+    </label>
+    <span class="switch-label">Wide</span>
+  </div>
 
   <!-- FIN Dropdown -->
-  <div>
-    <label for="finDropdown">FIN:</label>
+  <div class="input-group">
+    <label for="finDropdown">Aircraft FIN:</label>
     <select id="finDropdown">
       <option value="">-- Select FIN --</option>
     </select>
   </div>
 
   <!-- Crew Dropdown -->
-  <div>
-    <label for="crewDropdown">Crew:</label>
+  <div class="input-group">
+    <label for="crewDropdown">Crew Size:</label>
     <select id="crewDropdown">
       <option value="">-- Select Crew --</option>
     </select>
   </div>
 
-  <div id="info" style="margin-top:10px; font-weight:bold;"></div>
+  <div id="info"></div>
 </div>
 
-  <!-- 3. 이미지 표시 -->
-  <div>
-    <img id="fullscreenImage" src="PG0001.jpeg" alt="Selected Page">
-  </div>
+<!-- Image Display -->
+<div>
+  <img id="fullscreenImage" src="PG0001.jpeg" alt="Selected Page">
+</div>
 
 <script>
-
 document.addEventListener('DOMContentLoaded', function() {
+  
+  // =====================================================================
+  // DATASET 1: AIRCRAFT CONFIGURATIONS
+  // IF THE PDF UPDATES, YOU ONLY NEED TO CHANGE THE "pageNumber" HERE.
+  // =====================================================================
+  const aircraftData = {
+    "320 L1": { pageNumber: 5, lavkit: 0, soap: 1 },
+    "320 L2": { pageNumber: 7, lavkit: 0, soap: 1 },
+    "320 L3": { pageNumber: 9, lavkit: 0, soap: 1 }, 
+    "320 Dream Cabin Lite": { pageNumber: 11, lavkit: 0, soap: 1 },
+    "320 Dream Cabin Lite (Alt)": { pageNumber: 11, lavkit: 1, soap: 0 }, 
+    "320 Jetz": { pageNumber: 13, lavkit: 0, soap: 1 },
+    "321 L2": { pageNumber: 15, lavkit: 0, soap: 1 },
+    "321 Dream": { pageNumber: 17, lavkit: 0, soap: 1 },
+    "321 Glowing Hearted": { pageNumber: 19, lavkit: 0, soap: 1 },
+    "220": { pageNumber: 21, lavkit: 1, soap: 1 },
+    "737-8 Max23": { pageNumber: 23, lavkit: 1, soap: 1 },
+    "737-8 Max Uplift": { pageNumber: 25, lavkit: 1, soap: 1 },
+    "R319": { pageNumber: 30, lavkit: 0, soap: 1 },
+    "R320": { pageNumber: 32, lavkit: 0, soap: 1 },
+    "R321": { pageNumber: 34, lavkit: 0, soap: 1 },
+    "R737-8 Max": { pageNumber: 36, lavkit: 1, soap: 1 },
+    "A330-300 Dream": { pageNumber: 38, lavkit: 1, soap: 0 },
+    "A330-300 L2": { pageNumber: 50, lavkit: 1, soap: 1 },
+    "787-8": { pageNumber: 62, lavkit: 1, soap: 0 },
+    "787-9": { pageNumber: 74, lavkit: 1, soap: 0 },
+    "777-200LR": { pageNumber: 98, lavkit: 1, soap: 1 },
+    "777-300ER": { pageNumber: 110, lavkit: 1, soap: 1 },
+    "777-300HD": { pageNumber: 122, lavkit: 1, soap: 1 },
+    "777-300HD L2": { pageNumber: 134, lavkit: 1, soap: 1 }
+  };
+
+  // =====================================================================
+  // DATASET 2: FIN GROUPING
+  // Add new planes to the arrays below. The code will auto-map them!
+  // =====================================================================
+  const groupedFins = {
+    "320 L1": [235, 236, 239, 240, 241, 401, 402, 405],
+    "320 L2": [417, 418, 419, 420],
+    "320 L3": [421, 422],
+    "320 Dream Cabin Lite": [237, 242],
+    "320 Dream Cabin Lite (Alt)": [238], 
+    "320 Jetz": [225, 226, 232, 416],
+    "321 L2": [465, 466, 467, 483, 484],
+    "321 Dream": [451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 473],
+    "321 Glowing Hearted": [468],
+    "220": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142],
+    "737-8 Max23": [505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 521, 522, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545],
+    "737-8 Max Uplift": [571, 573, 574, 575, 576, 577, 578],
+    "R319": [255, 256, 257, 259, 262, 263, 272, 276, 277, 278, 279, 281, 283, 284, 286, 287, 290],
+    "R320": [243, 244, 245, 246, 247],
+    "R321": [469, 470, 471, 472, 474, 475, 476, 477, 478, 479, 480, 481, 482],
+    "R737-8 Max": [501, 502, 503, 504, 519, 520, 523],
+    "A330-300 Dream": [931, 932, 933, 934, 935, 936, 937, 938, 939, 941, 942, 943, 944, 945, 946, 947, 948],
+    "A330-300 L2": [949, 950],
+    "787-8": [801, 802, 803, 804, 805, 806, 807, 808],
+    "787-9": [831, 832, 833, 834, 835, 836, 837, 838, 839, 840, 841, 842, 843, 844, 845, 846, 847, 848, 849, 850, 851, 852, 853, 854, 855, 856, 857, 858, 859, 860, 861, 862],
+    "777-200LR": [701, 702, 703, 704, 705, 706],
+    "777-300ER": [731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742],
+    "777-300HD": [743, 744, 747, 748, 749],
+    "777-300HD L2": [745, 746]
+  };
+
+  // Automatically unpack the grouped data into a flat database for fast searching
+  const finDatabase = {};
+  for (const [aircraftType, fins] of Object.entries(groupedFins)) {
+      fins.forEach(fin => {
+          finDatabase[fin] = aircraftType;
+      });
+  }
+
   const modeSwitch = document.getElementById('modeSwitch');
   const finDropdown = document.getElementById('finDropdown');
   const crewDropdown = document.getElementById('crewDropdown');
   const fullscreenImage = document.getElementById('fullscreenImage');
   const infoDiv = document.getElementById('info'); 
 
-  // 샘플 데이터 (id = FIN 값, pageNumber = 기본 번호)
-  const data = [
-    { id: 0, crew: 2, pageNumber: 1, lavkit: 1, soap: 1 },
-
-//320 L1
-    { id: 235, crew: 2, pageNumber: 5, lavkit: 0, soap: 1 }, { id: 236, crew: 2, pageNumber: 5, lavkit: 0, soap: 1 }, 
-    { id: 239, crew: 2, pageNumber: 5, lavkit: 0, soap: 1 }, { id: 240, crew: 2, pageNumber: 5, lavkit: 0, soap: 1 },
-    { id: 241, crew: 2, pageNumber: 5, lavkit: 0, soap: 1 }, { id: 401, crew: 2, pageNumber: 5, lavkit: 0, soap: 1 },
-    { id: 402, crew: 2, pageNumber: 5, lavkit: 0, soap: 1 }, { id: 405, crew: 2, pageNumber: 5, lavkit: 0, soap: 1 },
-
-//320 L2
-    { id: 417, crew: 2, pageNumber: 7, lavkit: 0, soap: 1 }, { id: 418, crew: 2, pageNumber: 7, lavkit: 0, soap: 1 },
-    { id: 419, crew: 2, pageNumber: 7, lavkit: 0, soap: 1 }, { id: 420, crew: 2, pageNumber: 7, lavkit: 0, soap: 1 },
-
-//320 L2
-    { id: 421, crew: 2, pageNumber: 9, lavkit: 0, soap: 1 }, { id: 422, crew: 2, pageNumber: 9, lavkit: 0, soap: 1 },
-
-//320 Dream Cabin Lite
-    { id: 237, crew: 2, pageNumber: 11, lavkit: 0, soap: 1 }, { id: 238, crew: 2, pageNumber: 11, lavkit: 1, soap: 0 }, 
-    { id: 242, crew: 2, pageNumber: 11, lavkit: 0, soap: 1 }, 
-
-//320 Jetz
-    { id: 225, crew: 2, pageNumber: 13, lavkit: 0, soap: 1 }, { id: 226, crew: 2, pageNumber: 13, lavkit: 0, soap: 1 },
-    { id: 232, crew: 2, pageNumber: 13, lavkit: 0, soap: 1 }, { id: 416, crew: 2, pageNumber: 13, lavkit: 0, soap: 1 },
-
-//321 L1
-//    { id: 458, crew: 2, pageNumber: 15, lavkit: 0, soap: 1 }, { id: 459, crew: 2, pageNumber: 15, lavkit: 0, soap: 1 }, 
-
-//321 L2
-    { id: 465, crew: 2, pageNumber: 15, lavkit: 0, soap: 1 }, { id: 466, crew: 2, pageNumber: 15, lavkit: 0, soap: 1 },
-    { id: 467, crew: 2, pageNumber: 15, lavkit: 0, soap: 1 }, 
-    { id: 483, crew: 2, pageNumber: 15, lavkit: 0, soap: 1 }, { id: 484, crew: 2, pageNumber: 15, lavkit: 0, soap: 1 },
-
-//321 Dream
-    { id: 451, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 }, { id: 452, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 },
-    { id: 453, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 }, { id: 454, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 },
-    { id: 455, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 }, { id: 456, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 },
-    { id: 457, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 }, { id: 458, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 },
-    { id: 459, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 }, { id: 460, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 },
-    { id: 461, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 }, { id: 462, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 },
-    { id: 463, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 }, { id: 464, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 },
-    { id: 473, crew: 2, pageNumber: 17, lavkit: 0, soap: 1 }, 
-
-//321 Glowing Hearted
-    { id: 468, crew: 2, pageNumber: 19, lavkit: 0, soap: 1 },
-
-//220
-    { id: 101, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 102, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 103, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 104, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 105, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 106, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 107, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 108, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 109, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 110, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 111, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 112, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 113, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 114, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 115, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 116, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 117, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 118, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 119, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 120, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 121, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 122, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 123, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 124, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 125, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 126, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 127, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 128, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 129, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 130, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 131, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 132, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 133, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 134, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 135, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 136, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 137, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 138, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 139, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 140, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 }, { id: 141, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-    { id: 142, crew: 2, pageNumber: 21, lavkit: 1, soap: 1 },
-
-//737-8 Max23
-    { id: 505, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 506, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 507, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 508, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 509, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 510, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 511, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 512, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 513, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 514, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 515, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 516, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 517, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 518, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, 
-    { id: 520, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 521, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 522, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 523, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 524, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 523, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 526, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 527, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 528, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 529, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 530, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 531, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 532, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 533, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 534, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 535, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 536, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 537, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 538, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 539, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-    { id: 540, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 }, { id: 541, crew: 2, pageNumber: 23, lavkit: 1, soap: 1 },
-
-
-//737-8 Max Uplift
-    { id: 571, crew: 2, pageNumber: 25, lavkit: 1, soap: 1 },
-//    { id: 572, crew: 2, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 573, crew: 2, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 574, crew: 2, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 575, crew: 2, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 576, crew: 2, pageNumber: 25, lavkit: 1, soap: 1 },
-    { id: 577, crew: 2, pageNumber: 25, lavkit: 1, soap: 1 }, { id: 578, crew: 2, pageNumber: 25, lavkit: 1, soap: 1 },
-
-//321 XLR
-
-//R319
-    { id: 255, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 }, { id: 256, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 },
-    { id: 257, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 }, { id: 259, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 },
-    { id: 262, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 }, { id: 263, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 },
-    { id: 272, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 }, { id: 273, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 },
-    { id: 276, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 }, { id: 277, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 },
-    { id: 278, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 }, { id: 279, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 },
-    { id: 281, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 },
-    { id: 283, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 }, { id: 284, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 },
-    { id: 286, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 }, { id: 287, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 },
-    { id: 290, crew: 2, pageNumber: 30, lavkit: 0, soap: 1 }, 
-
-//R320
-    { id: 243, crew: 2, pageNumber: 32, lavkit: 0, soap: 1 },
-    { id: 244, crew: 2, pageNumber: 32, lavkit: 0, soap: 1 }, { id: 245, crew: 2, pageNumber: 32, lavkit: 0, soap: 1 },
-    { id: 246, crew: 2, pageNumber: 32, lavkit: 0, soap: 1 }, { id: 247, crew: 2, pageNumber: 32, lavkit: 0, soap: 1 },
-
-//R321
-    { id: 469, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 }, { id: 470, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 },
-    { id: 471, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 }, { id: 472, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 },
-    { id: 474, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 },
-    { id: 475, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 }, { id: 476, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 },
-    { id: 477, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 }, { id: 478, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 },
-    { id: 479, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 }, { id: 480, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 },
-    { id: 481, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 }, { id: 482, crew: 2, pageNumber: 34, lavkit: 0, soap: 1 },
-
-//R737-8 Max
-    { id: 501, crew: 2, pageNumber: 36, lavkit: 1, soap: 1 }, { id: 502, crew: 2, pageNumber: 36, lavkit: 1, soap: 1 },
-    { id: 503, crew: 2, pageNumber: 36, lavkit: 1, soap: 1 }, { id: 504, crew: 2, pageNumber: 36, lavkit: 1, soap: 1 }, 
-    { id: 519, crew: 2, pageNumber: 36, lavkit: 1, soap: 1 },
-
-
-
-//    { id: 251, crew: 2, pageNumber: 3, lavkit: 0, soap: 1 }, { id: 252, crew: 2, pageNumber: 3, lavkit: 0, soap: 1 },
-//    { id: 260, crew: 2, pageNumber: 5, lavkit: 0, soap: 1 },
-//    { id: 415, crew: 2, pageNumber: 9, lavkit: 0, soap: 1 }, 
-
-
-//A330-300 Dream
-    { id: 931, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 }, { id: 932, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 },
-    { id: 933, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 }, { id: 934, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 },
-    { id: 935, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 }, { id: 936, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 },
-    { id: 937, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 }, { id: 938, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 },
-    { id: 939, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 }, { id: 938, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 },
-    { id: 941, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 }, { id: 942, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 },
-    { id: 943, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 }, { id: 944, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 },
-    { id: 945, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 }, { id: 946, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 }, 
-    { id: 947, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 }, { id: 948, crew: 3, pageNumber: 38, lavkit: 1, soap: 0 },
-
-
-//A330-300 L2
-    { id: 949, crew: 3, pageNumber: 50, lavkit: 1, soap: 1 }, { id: 950, crew: 3, pageNumber: 50, lavkit: 1, soap: 1 },
-
-//787-8
-    { id: 801, crew: 3, pageNumber: 62, lavkit: 1, soap: 0 }, { id: 802, crew: 3, pageNumber: 62, lavkit: 1, soap: 0 },
-    { id: 803, crew: 3, pageNumber: 62, lavkit: 1, soap: 0 }, { id: 804, crew: 3, pageNumber: 62, lavkit: 1, soap: 0 },
-    { id: 805, crew: 3, pageNumber: 62, lavkit: 1, soap: 0 }, { id: 806, crew: 3, pageNumber: 62, lavkit: 1, soap: 0 },
-    { id: 807, crew: 3, pageNumber: 62, lavkit: 1, soap: 0 }, { id: 808, crew: 3, pageNumber: 62, lavkit: 1, soap: 0 },
-
-//787-9
-    { id: 831, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 832, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 833, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 834, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 835, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 836, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 837, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 838, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 839, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 840, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 841, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 842, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 843, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 844, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 845, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 846, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 847, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 848, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 849, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 850, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 851, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 852, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 853, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 854, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 855, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 856, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 857, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 858, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 859, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 860, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
-    { id: 861, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 }, { id: 862, crew: 3, pageNumber: 74, lavkit: 1, soap: 0 },
- 
-//787-10
-
-//777-200LR
-    { id: 701, crew: 3, pageNumber: 98, lavkit: 1, soap: 1 }, { id: 702, crew: 3, pageNumber: 98, lavkit: 1, soap: 1 },
-    { id: 703, crew: 3, pageNumber: 98, lavkit: 1, soap: 1 }, { id: 704, crew: 3, pageNumber: 98, lavkit: 1, soap: 1 },
-    { id: 705, crew: 3, pageNumber: 98, lavkit: 1, soap: 1 }, { id: 706, crew: 3, pageNumber: 98, lavkit: 1, soap: 1 },
-
-//777-300ER
-    { id: 731, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 }, { id: 732, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 },
-    { id: 733, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 }, { id: 734, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 },
-    { id: 735, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 }, { id: 736, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 },
-    { id: 737, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 }, { id: 738, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 },
-    { id: 739, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 }, { id: 740, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 },
-    { id: 741, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 }, { id: 742, crew: 3, pageNumber: 110, lavkit: 1, soap: 1 },
-
-//777-300HD
-    { id: 743, crew: 3, pageNumber: 122, lavkit: 1, soap: 1 }, { id: 744, crew: 3, pageNumber: 122, lavkit: 1, soap: 1 },
-    { id: 747, crew: 3, pageNumber: 122, lavkit: 1, soap: 1 }, { id: 748, crew: 3, pageNumber: 122, lavkit: 1, soap: 1 },
-    { id: 749, crew: 3, pageNumber: 122, lavkit: 1, soap: 1 },
-
-//777-300HD L2
-    { id: 745, crew: 3, pageNumber: 134, lavkit: 1, soap: 1 }, { id: 746, crew: 3, pageNumber: 134, lavkit: 1, soap: 1 },
-
-    ];
-
   let currentMode = "Narrow";
 
-  // FIN 옵션 채우기
+  // Populate FIN options dynamically
   function populateFinOptions() {
     finDropdown.innerHTML = '<option value="">-- Select FIN --</option>';
     
-    // 데이터 필터 + 정렬
-    const filtered = data
-      .filter(item => (currentMode === "Narrow" && item.id < 700) ||
-                      (currentMode === "Wide" && item.id >= 700))
-      .sort((a, b) => a.id - b.id); // 오름차순
+    const validFins = Object.keys(finDatabase)
+      .map(Number)
+      .filter(fin => (currentMode === "Narrow" && fin < 700) || (currentMode === "Wide" && fin >= 700))
+      .sort((a, b) => a - b); 
 
-    filtered.forEach(item => {
-      if (item.id > 0) {
+    validFins.forEach(fin => {
+      const aircraftType = finDatabase[fin];
+      const info = aircraftData[aircraftType];
+
+      if (info) {
         const option = document.createElement('option');
-        option.value = item.id;
-        option.textContent = item.id;
-        option.dataset.pageNumber = item.pageNumber;
-        option.dataset.lavkit = item.lavkit;
-        option.dataset.soap = item.soap;
+        option.value = fin;
+        option.textContent = fin;
+        
+        option.dataset.pageNumber = info.pageNumber;
+        option.dataset.lavkit = info.lavkit;
+        option.dataset.soap = info.soap;
+        
         finDropdown.appendChild(option);
       }
     });
   }
 
-  // Crew 옵션 채우기
+  // Populate Crew options
   function populateCrewOptions() {
     crewDropdown.innerHTML = '<option value="">-- Select Crew --</option>';
     if (!finDropdown.value) return;
@@ -358,11 +298,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentMode === "Narrow") {
       ["1", "2"].forEach((label, index) => {
         const opt = document.createElement('option');
-        opt.value = index; // 0, 1
+        opt.value = index; 
         opt.textContent = label;
         crewDropdown.appendChild(opt);
       });
-      crewDropdown.value = 1; // Narrow 기본값
+      crewDropdown.value = 1; // Narrow default
 
     } else { // Wide
       const wideOptions = [
@@ -372,31 +312,33 @@ document.addEventListener('DOMContentLoaded', function() {
       ];
       wideOptions.forEach((label, index) => {
         const opt = document.createElement('option');
-        opt.value = index; // 0 ~ 8
+        opt.value = index;
         opt.textContent = label;
         crewDropdown.appendChild(opt);
       });
-      crewDropdown.value = 7; // Wide 기본값
+      crewDropdown.value = 7; // Wide default
     }
 
-    // FIN 선택 후 기본값으로 이미지 + info 표시
     updateImage();
   }
 
-  // 이미지 업데이트
+  // Update Image Logic
   function updateImage() {
     const finOption = finDropdown.selectedOptions[0];
     const crewIndex = crewDropdown.value;
+    
     if (!finOption || crewIndex === "") return;
 
     const basePage = parseInt(finOption.dataset.pageNumber, 10);
     const finalPage = basePage + parseInt(crewIndex, 10);
+    
     const filename = "PG" + finalPage.toString().padStart(4, "0") + ".jpeg";
     fullscreenImage.src = filename;
 
     infoDiv.textContent = `Lav Kit: ${finOption.dataset.lavkit === "1" ? 'T' : 'S'} | Soap: ${finOption.dataset.soap === "1" ? 'T' : 'S'}`;
-}
+  }
 
+  // Event Listeners
   modeSwitch.addEventListener('change', () => {
     currentMode = modeSwitch.checked ? "Wide" : "Narrow";
     populateFinOptions();
@@ -408,6 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
   finDropdown.addEventListener('change', populateCrewOptions);
   crewDropdown.addEventListener('change', updateImage);
 
+  // Initialize the list on page load
   populateFinOptions();
 });
 </script>
