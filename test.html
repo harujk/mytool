@@ -158,10 +158,12 @@
     <span class="switch-label">Wide</span>
   </div>
 
+  <!-- FIN Dropdown -->
   <div class="input-group">
-    <label for="finInput">Aircraft FIN:</label>
-    <input type="tel" id="finInput" list="finList" placeholder="Tap to type (e.g. 501)..." maxlength="3">
-    <datalist id="finList"></datalist>
+    <label for="finDropdown">Aircraft FIN:</label>
+    <select id="finDropdown">
+      <option value="">-- Select FIN --</option>
+    </select>
   </div>
 
   <!-- Crew Dropdown -->
@@ -254,16 +256,18 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   const modeSwitch = document.getElementById('modeSwitch');
-  const finDropdown = document.getElementById('finDropdown');
+  const finInput = document.getElementById('finInput'); // Changed to finInput
+  const finList = document.getElementById('finList');   // Added datalist
   const crewDropdown = document.getElementById('crewDropdown');
   const fullscreenImage = document.getElementById('fullscreenImage');
   const infoDiv = document.getElementById('info'); 
 
   let currentMode = "Narrow";
 
-  // Populate FIN options dynamically
+  // Populate FIN options dynamically into the datalist
   function populateFinOptions() {
-    finDropdown.innerHTML = '<option value="">-- Select FIN --</option>';
+    finList.innerHTML = ''; // Clear existing
+    finInput.value = ''; // Clear input on mode switch
     
     const validFins = Object.keys(finDatabase)
       .map(Number)
@@ -271,27 +275,19 @@ document.addEventListener('DOMContentLoaded', function() {
       .sort((a, b) => a - b); 
 
     validFins.forEach(fin => {
-      const aircraftType = finDatabase[fin];
-      const info = aircraftData[aircraftType];
-
-      if (info) {
         const option = document.createElement('option');
         option.value = fin;
-        option.textContent = fin;
-        
-        option.dataset.pageNumber = info.pageNumber;
-        option.dataset.lavkit = info.lavkit;
-        option.dataset.soap = info.soap;
-        
-        finDropdown.appendChild(option);
-      }
+        finList.appendChild(option);
     });
   }
 
   // Populate Crew options
   function populateCrewOptions() {
     crewDropdown.innerHTML = '<option value="">-- Select Crew --</option>';
-    if (!finDropdown.value) return;
+    
+    // Only populate if they typed a valid FIN that exists in our current list
+    const typedFin = finInput.value;
+    if (!typedFin || !finDatabase[typedFin]) return;
 
     if (currentMode === "Narrow") {
       ["1", "2"].forEach((label, index) => {
@@ -301,7 +297,6 @@ document.addEventListener('DOMContentLoaded', function() {
         crewDropdown.appendChild(opt);
       });
       crewDropdown.value = 1; // Narrow default
-
     } else { // Wide
       const wideOptions = [
         "Crew 2","1/2","2/2",
@@ -322,18 +317,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Update Image Logic
   function updateImage() {
-    const finOption = finDropdown.selectedOptions[0];
+    const typedFin = finInput.value;
     const crewIndex = crewDropdown.value;
     
-    if (!finOption || crewIndex === "") return;
+    // Stop if FIN is invalid or crew isn't selected yet
+    if (!typedFin || crewIndex === "" || !finDatabase[typedFin]) return;
 
-    const basePage = parseInt(finOption.dataset.pageNumber, 10);
+    // Look up data directly from our datasets
+    const aircraftType = finDatabase[typedFin];
+    const info = aircraftData[aircraftType];
+
+    const basePage = parseInt(info.pageNumber, 10);
     const finalPage = basePage + parseInt(crewIndex, 10);
     
     const filename = "PG" + finalPage.toString().padStart(4, "0") + ".jpeg";
     fullscreenImage.src = filename;
 
-    infoDiv.textContent = `Lav Kit: ${finOption.dataset.lavkit === "1" ? 'T' : 'S'} | Soap: ${finOption.dataset.soap === "1" ? 'T' : 'S'}`;
+    infoDiv.textContent = `Lav Kit: ${info.lavkit === 1 ? 'T' : 'S'} | Soap: ${info.soap === 1 ? 'T' : 'S'}`;
   }
 
   // Event Listeners
@@ -345,7 +345,8 @@ document.addEventListener('DOMContentLoaded', function() {
     infoDiv.textContent = '';
   });
 
-  finDropdown.addEventListener('change', populateCrewOptions);
+  // Use 'input' instead of 'change' so it updates as they type
+  finInput.addEventListener('input', populateCrewOptions); 
   crewDropdown.addEventListener('change', updateImage);
 
   // Initialize the list on page load
