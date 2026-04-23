@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<!-- Crucial for mobile scaling -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FIN Crew Selector</title>
 <style>
@@ -111,8 +110,8 @@
     color: #ccc;
   }
 
-  /* Fat dropdowns for easy tapping */
-  select { 
+  /* Fat dropdowns and inputs for easy tapping */
+  select, input[type="tel"] { 
     width: 100%; /* Full width */
     box-sizing: border-box;
     padding: 14px; 
@@ -121,6 +120,9 @@
     color: #ffffff;
     border: 1px solid #555;
     border-radius: 8px;
+  }
+  
+  select {
     appearance: none; /* Removes default OS styling for a cleaner look */
   }
 
@@ -144,11 +146,9 @@
 </head>
 <body>
 
-<!-- Update this date whenever you modify the arrays -->
 <div class="last-updated">Last updated: April 17, 2026 (v 2.0)</div>
 
 <div class="dropdown-container">
-  <!-- Narrow/Wide Switch -->
   <div class="switch-container">
     <span class="switch-label">Narrow</span>
     <label class="switch">
@@ -158,15 +158,12 @@
     <span class="switch-label">Wide</span>
   </div>
 
-  <!-- FIN Dropdown -->
   <div class="input-group">
-    <label for="finDropdown">Aircraft FIN:</label>
-    <select id="finDropdown">
-      <option value="">-- Select FIN --</option>
-    </select>
+    <label for="finInput">Aircraft FIN:</label>
+    <input type="tel" id="finInput" list="finList" placeholder="Tap to type (e.g. 501)..." maxlength="3">
+    <datalist id="finList"></datalist>
   </div>
 
-  <!-- Crew Dropdown -->
   <div class="input-group">
     <label for="crewDropdown">Crew Size:</label>
     <select id="crewDropdown">
@@ -177,7 +174,6 @@
   <div id="info"></div>
 </div>
 
-<!-- Image Display -->
 <div>
   <img id="fullscreenImage" src="PG0001.jpeg" alt="Selected Page">
 </div>
@@ -256,8 +252,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   const modeSwitch = document.getElementById('modeSwitch');
-  const finInput = document.getElementById('finInput'); // Changed to finInput
-  const finList = document.getElementById('finList');   // Added datalist
+  const finInput = document.getElementById('finInput'); 
+  const finList = document.getElementById('finList');   
   const crewDropdown = document.getElementById('crewDropdown');
   const fullscreenImage = document.getElementById('fullscreenImage');
   const infoDiv = document.getElementById('info'); 
