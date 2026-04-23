@@ -63,7 +63,7 @@
 
   /* Fat dropdowns and inputs for easy tapping */
   select, input[type="tel"] { 
-    flex-grow: 1; /* Take up remaining space next to button */
+    flex-grow: 1; 
     width: 100%;
     box-sizing: border-box;
     padding: 14px; 
@@ -118,7 +118,7 @@
 </head>
 <body>
 
-<div class="last-updated">Last updated: April 17, 2026 (v 2.1.1)</div>
+<div class="last-updated">Last updated: April 17, 2026 (v 2.2)</div>
 
 <div class="dropdown-container">
   
@@ -129,7 +129,7 @@
         <option value="">-- Select FIN --</option>
       </select>
 
-      <input type="tel" id="finInput" list="finList" placeholder="Type FIN..." maxlength="3" style="display: none;">
+      <input type="tel" id="finInput" list="finList" placeholder="Tap to type..." maxlength="3" style="display: none;">
       <datalist id="finList"></datalist>
 
       <button id="modeToggleBtn" type="button" title="Toggle Typing Mode">⌨️</button>
@@ -235,23 +235,17 @@ document.addEventListener('DOMContentLoaded', function() {
     isTypingMode = !isTypingMode;
 
     if (isTypingMode) {
-      // Switch to typing
       finDropdown.style.display = 'none';
       finInput.style.display = 'block';
-      modeToggleBtn.innerHTML = '📋'; // Change icon to a list
-      
-      // Clear the box so the user can type immediately
+      modeToggleBtn.innerHTML = '📋'; 
       finInput.value = ''; 
       finInput.focus();
     } else {
-      // Switch to scrolling
       finInput.style.display = 'none';
       finDropdown.style.display = 'block';
-      modeToggleBtn.innerHTML = '⌨️'; // Change icon back to keyboard
-      
-      // Sync value back if valid, otherwise clear it
+      modeToggleBtn.innerHTML = '⌨️'; 
       finDropdown.value = finDatabase[finInput.value] ? finInput.value : ''; 
-      populateCrewOptions(); // Ensure the Crew dropdown updates to match
+      populateCrewOptions(); 
     }
   });
 
@@ -266,33 +260,29 @@ document.addEventListener('DOMContentLoaded', function() {
     finList.innerHTML = ''; 
     finInput.value = ''; 
     
-    // Sort all FINs sequentially regardless of wide/narrow body
     const allFins = Object.keys(finDatabase)
       .map(Number)
       .sort((a, b) => a - b); 
 
     allFins.forEach(fin => {
-        // Add to Dropdown
         const optSelect = document.createElement('option');
         optSelect.value = fin;
         optSelect.textContent = fin;
         finDropdown.appendChild(optSelect);
 
-        // Add to Datalist for typing autocomplete
         const optList = document.createElement('option');
         optList.value = fin;
         finList.appendChild(optList);
     });
   }
 
-  // Populate Crew options (Algorithm checks if FIN is < 700 to determine narrow vs wide)
+  // Populate Crew options
   function populateCrewOptions() {
     crewDropdown.innerHTML = '<option value="">-- Select Crew --</option>';
     
     const typedFin = getActiveFinValue();
     if (!typedFin || !finDatabase[typedFin]) return;
 
-    // ALGORITHM: Determine Narrow vs Wide automatically based on FIN number
     const isNarrowBody = parseInt(typedFin, 10) < 700;
 
     if (isNarrowBody) {
@@ -302,9 +292,8 @@ document.addEventListener('DOMContentLoaded', function() {
         opt.textContent = label;
         crewDropdown.appendChild(opt);
       });
-      crewDropdown.value = 1; // Narrow default
+      crewDropdown.value = 1; 
     } else { 
-      // Wide Body Logic
       const wideOptions = [
         "Crew 2","1/2","2/2",
         "Crew 3","1/3","2/3","3/3",
@@ -316,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
         opt.textContent = label;
         crewDropdown.appendChild(opt);
       });
-      crewDropdown.value = 7; // Wide default (3/3)
+      crewDropdown.value = 7; 
     }
 
     updateImage();
@@ -341,10 +330,16 @@ document.addEventListener('DOMContentLoaded', function() {
     infoDiv.textContent = `Lav Kit: ${info.lavkit === 1 ? 'T' : 'S'} | Soap: ${info.soap === 1 ? 'T' : 'S'}`;
   }
 
-  // Listen to BOTH the dropdown and the input fields
+  // Event Listeners
   finDropdown.addEventListener('change', populateCrewOptions);
   finInput.addEventListener('input', populateCrewOptions); 
   crewDropdown.addEventListener('change', updateImage);
+
+  // Clear the input box when the user taps on it
+  finInput.addEventListener('focus', function() {
+    this.value = ''; // Clears the typed text instantly
+    populateCrewOptions(); // Resets the Crew dropdown
+  });
 
   // Initialize
   populateFinOptions();
