@@ -39,61 +39,6 @@
     margin: 0 auto 20px auto;
   }
 
-  /* Switch styling */
-  .switch-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-  }
-
-  .switch-label {
-    font-weight: bold;
-    font-size: 18px;
-  }
-
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
-
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #555;
-    transition: 0.4s;
-    border-radius: 34px;
-  }
-
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
-  }
-
-  input:checked + .slider {
-    background-color: #4CAF50;
-  }
-
-  input:checked + .slider:before {
-    transform: translateX(26px);
-  }
-
   /* Input Groups inside Container */
   .input-group {
     display: flex;
@@ -139,8 +84,9 @@
     color: white;
     border: 1px solid #555;
     border-radius: 8px;
-    padding: 0 15px;
-    font-size: 22px;
+    padding: 0 12px; /* Tightened padding */
+    font-size: 34px; /* Much larger icon */
+    line-height: 1; /* Prevents the button from stretching vertically */
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -172,18 +118,10 @@
 </head>
 <body>
 
-<div class="last-updated">Last updated: April 17, 2026 (v 2.1)</div>
+<div class="last-updated">Last updated: April 23, 2026 (v 2.1)</div>
 
 <div class="dropdown-container">
-  <div class="switch-container">
-    <span class="switch-label">Narrow</span>
-    <label class="switch">
-      <input type="checkbox" id="modeSwitch">
-      <span class="slider"></span>
-    </label>
-    <span class="switch-label">Wide</span>
-  </div>
-
+  
   <div class="input-group">
     <label>Aircraft FIN:</label>
     <div class="fin-wrapper">
@@ -281,7 +219,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Element References
-  const modeSwitch = document.getElementById('modeSwitch');
   const finDropdown = document.getElementById('finDropdown'); 
   const finInput = document.getElementById('finInput'); 
   const finList = document.getElementById('finList'); 
@@ -291,7 +228,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const infoDiv = document.getElementById('info'); 
 
   // State Variables
-  let currentMode = "Narrow";
   let isTypingMode = false;
 
   // Toggle Between Dropdown and Input
@@ -327,12 +263,12 @@ document.addEventListener('DOMContentLoaded', function() {
     finList.innerHTML = ''; 
     finInput.value = ''; 
     
-    const validFins = Object.keys(finDatabase)
+    // Sort all FINs sequentially regardless of wide/narrow body
+    const allFins = Object.keys(finDatabase)
       .map(Number)
-      .filter(fin => (currentMode === "Narrow" && fin < 700) || (currentMode === "Wide" && fin >= 700))
       .sort((a, b) => a - b); 
 
-    validFins.forEach(fin => {
+    allFins.forEach(fin => {
         // Add to Dropdown
         const optSelect = document.createElement('option');
         optSelect.value = fin;
@@ -346,22 +282,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Populate Crew options
+  // Populate Crew options (Algorithm checks if FIN is < 700 to determine narrow vs wide)
   function populateCrewOptions() {
     crewDropdown.innerHTML = '<option value="">-- Select Crew --</option>';
     
     const typedFin = getActiveFinValue();
     if (!typedFin || !finDatabase[typedFin]) return;
 
-    if (currentMode === "Narrow") {
+    // ALGORITHM: Determine Narrow vs Wide automatically based on FIN number
+    const isNarrowBody = parseInt(typedFin, 10) < 700;
+
+    if (isNarrowBody) {
       ["1", "2"].forEach((label, index) => {
         const opt = document.createElement('option');
         opt.value = index; 
         opt.textContent = label;
         crewDropdown.appendChild(opt);
       });
-      crewDropdown.value = 1; 
+      crewDropdown.value = 1; // Narrow default
     } else { 
+      // Wide Body Logic
       const wideOptions = [
         "Crew 2","1/2","2/2",
         "Crew 3","1/3","2/3","3/3",
@@ -373,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
         opt.textContent = label;
         crewDropdown.appendChild(opt);
       });
-      crewDropdown.value = 7; 
+      crewDropdown.value = 7; // Wide default (3/3)
     }
 
     updateImage();
@@ -397,15 +337,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     infoDiv.textContent = `Lav Kit: ${info.lavkit === 1 ? 'T' : 'S'} | Soap: ${info.soap === 1 ? 'T' : 'S'}`;
   }
-
-  // Event Listeners
-  modeSwitch.addEventListener('change', () => {
-    currentMode = modeSwitch.checked ? "Wide" : "Narrow";
-    populateFinOptions();
-    crewDropdown.innerHTML = '<option value="">-- Select Crew --</option>';
-    fullscreenImage.src = "PG0001.jpeg";
-    infoDiv.textContent = '';
-  });
 
   // Listen to BOTH the dropdown and the input fields
   finDropdown.addEventListener('change', populateCrewOptions);
