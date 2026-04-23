@@ -84,9 +84,9 @@
     color: white;
     border: 1px solid #555;
     border-radius: 8px;
-    padding: 0 12px; /* Tightened padding */
-    font-size: 34px; /* Much larger icon */
-    line-height: 1; /* Prevents the button from stretching vertically */
+    padding: 0 12px; 
+    font-size: 34px; 
+    line-height: 1; 
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -118,7 +118,7 @@
 </head>
 <body>
 
-<div class="last-updated">Last updated: April 23, 2026 (v 2.1)</div>
+<div class="last-updated">Last updated: April 17, 2026 (v 2.1.1)</div>
 
 <div class="dropdown-container">
   
@@ -239,7 +239,9 @@ document.addEventListener('DOMContentLoaded', function() {
       finDropdown.style.display = 'none';
       finInput.style.display = 'block';
       modeToggleBtn.innerHTML = '📋'; // Change icon to a list
-      finInput.value = finDropdown.value; // Sync selected value over to input
+      
+      // Clear the box so the user can type immediately
+      finInput.value = ''; 
       finInput.focus();
     } else {
       // Switch to scrolling
@@ -249,6 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Sync value back if valid, otherwise clear it
       finDropdown.value = finDatabase[finInput.value] ? finInput.value : ''; 
+      populateCrewOptions(); // Ensure the Crew dropdown updates to match
     }
   });
 
