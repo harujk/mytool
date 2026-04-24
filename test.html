@@ -124,21 +124,21 @@
 </head>
 <body>
 
-<div class="last-updated">Last updated: April 17, 2026 (v 2.1.1)</div>
+<div class="last-updated">Last updated: April 24, 2026 (v 2.1.2)</div>
 
 <div class="dropdown-container">
   
   <div class="input-group">
     <label>Aircraft FIN:</label>
     <div class="fin-wrapper">
-      <select id="finDropdown">
+      <select id="finDropdown" style="display: none;">
         <option value="">-- Select FIN --</option>
       </select>
 
-      <input type="tel" id="finInput" list="finList" placeholder="Tap to type..." maxlength="3" style="display: none;">
+      <input type="tel" id="finInput" list="finList" placeholder="Tap to type..." maxlength="3">
       <datalist id="finList"></datalist>
 
-      <button id="modeToggleBtn" type="button" title="Toggle Typing Mode">⌨️</button>
+      <button id="modeToggleBtn" type="button" title="Toggle Mode">📋</button>
     </div>
   </div>
 
@@ -233,8 +233,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const imageContainer = document.getElementById('imageContainer');
   const infoDiv = document.getElementById('info'); 
 
-  // State Variables
-  let isTypingMode = false;
+  // State Variables (Typing mode is now default)
+  let isTypingMode = true;
 
   // Toggle Between Dropdown and Input
   modeToggleBtn.addEventListener('click', () => {
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
       ];
       narrowOptions.forEach((optData) => {
         const opt = document.createElement('option');
-        opt.value = JSON.stringify(optData.offsets); // Save the array as a string
+        opt.value = JSON.stringify(optData.offsets); 
         opt.textContent = optData.label;
         crewDropdown.appendChild(opt);
       });
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
       ];
       wideOptions.forEach((optData) => {
         const opt = document.createElement('option');
-        opt.value = JSON.stringify(optData.offsets); // Save the array as a string
+        opt.value = JSON.stringify(optData.offsets); 
         opt.textContent = optData.label;
         crewDropdown.appendChild(opt);
       });
@@ -326,14 +326,14 @@ document.addEventListener('DOMContentLoaded', function() {
   // Update Image Logic
   function updateImage() {
     const typedFin = getActiveFinValue();
-    const crewValue = crewDropdown.value; // Now retrieving the JSON string
+    const crewValue = crewDropdown.value; 
     
     if (!typedFin || crewValue === "" || !finDatabase[typedFin]) return;
 
     const aircraftType = finDatabase[typedFin];
     const info = aircraftData[aircraftType];
     const basePage = parseInt(info.pageNumber, 10);
-    const offsets = JSON.parse(crewValue); // Convert the string back to an array of offsets
+    const offsets = JSON.parse(crewValue); 
 
     // Clear the container before adding new images
     imageContainer.innerHTML = '';
