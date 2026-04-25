@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<!-- Crucial for mobile scaling -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FIN Crew Selector</title>
 <style>
@@ -11,7 +10,7 @@
     font-family: Arial, sans-serif; 
     text-align: center; 
     margin: 0;
-    padding: 50px 15px 20px 15px; /* Added padding to clear the top-right date */
+    padding: 50px 15px 20px 15px; 
     background-color: #121212;
     color: #ffffff;
     font-size: 18px;
@@ -26,10 +25,10 @@
     color: #888;
   }
 
-  /* Mobile-First Dropdown Layout (Vertical Stacking) */
+  /* Mobile-First Dropdown Layout */
   .dropdown-container {
     display: flex;
-    flex-direction: column; /* Stack elements vertically for thumbs */
+    flex-direction: column; 
     align-items: stretch;
     gap: 20px;
     padding: 20px;
@@ -40,67 +39,11 @@
     margin: 0 auto 20px auto;
   }
 
-  /* Keep the switch horizontal and centered */
-  .switch-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-  }
-
-  .switch-label {
-    font-weight: bold;
-    font-size: 18px;
-  }
-
-  /* Switch Styling */
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
-
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #555;
-    transition: 0.4s;
-    border-radius: 34px;
-  }
-
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
-  }
-
-  input:checked + .slider {
-    background-color: #4CAF50;
-  }
-
-  input:checked + .slider:before {
-    transform: translateX(26px);
-  }
-
   /* Input Groups inside Container */
   .input-group {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align label to left */
+    align-items: flex-start; 
     width: 100%;
   }
 
@@ -111,9 +54,17 @@
     color: #ccc;
   }
 
-  /* Fat dropdowns for easy tapping */
-  select { 
-    width: 100%; /* Full width */
+  /* Wrapper to hold dropdown/input and toggle button side-by-side */
+  .fin-wrapper {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+  }
+
+  /* Fat dropdowns and inputs for easy tapping */
+  select, input[type="tel"] { 
+    flex-grow: 1; 
+    width: 100%;
     box-sizing: border-box;
     padding: 14px; 
     font-size: 18px; 
@@ -121,15 +72,70 @@
     color: #ffffff;
     border: 1px solid #555;
     border-radius: 8px;
-    appearance: none; /* Removes default OS styling for a cleaner look */
+  }
+  
+  select {
+    appearance: none; 
   }
 
-  /* Image Display */
+  /* Toggle Mode Button */
+  #modeToggleBtn {
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 0 12px; 
+    font-size: 34px; 
+    line-height: 1; 
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+
+  #modeToggleBtn:active {
+    background-color: #555;
+  }
+
+  /* Crew Button Options (Replaces Dropdown) */
+  .crew-options-container {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .crew-btn {
+    flex: 1; /* Makes buttons take up equal space */
+    padding: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border: 1px solid #555;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+  }
+
+  .crew-btn.active {
+    background-color: #4CAF50; /* Green highlight for selected */
+    border-color: #4CAF50;
+    color: #ffffff;
+  }
+
+  /* Image Display Container (Stacks multiple images now) */
+  #imageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; 
+  }
+
   img { 
     max-width: 100%; 
     border: 2px solid #444; 
     border-radius: 8px;
-    margin-top: 10px; 
   }
 
   #info {
@@ -144,42 +150,35 @@
 </head>
 <body>
 
-<!-- Update this date whenever you modify the arrays -->
-<div class="last-updated">Last updated: April 17, 2026 (v 2.0)</div>
+<div class="last-updated">Last updated: April 24, 2026 (v 2.1)</div>
 
 <div class="dropdown-container">
-  <!-- Narrow/Wide Switch -->
-  <div class="switch-container">
-    <span class="switch-label">Narrow</span>
-    <label class="switch">
-      <input type="checkbox" id="modeSwitch">
-      <span class="slider"></span>
-    </label>
-    <span class="switch-label">Wide</span>
+  
+  <div class="input-group">
+    <label>Aircraft FIN:</label>
+    <div class="fin-wrapper">
+      <select id="finDropdown" style="display: none;">
+        <option value="">-- Select FIN --</option>
+      </select>
+
+      <input type="tel" id="finInput" list="finList" placeholder="Tap to type..." maxlength="3">
+      <datalist id="finList"></datalist>
+
+      <button id="modeToggleBtn" type="button" title="Toggle Mode">📋</button>
+    </div>
   </div>
 
-  <!-- FIN Dropdown -->
   <div class="input-group">
-    <label for="finDropdown">Aircraft FIN:</label>
-    <select id="finDropdown">
-      <option value="">-- Select FIN --</option>
-    </select>
-  </div>
-
-  <!-- Crew Dropdown -->
-  <div class="input-group">
-    <label for="crewDropdown">Crew Size:</label>
-    <select id="crewDropdown">
-      <option value="">-- Select Crew --</option>
-    </select>
+    <label>Crew Size:</label>
+    <div id="crewOptionsContainer" class="crew-options-container">
+      </div>
   </div>
 
   <div id="info"></div>
 </div>
 
-<!-- Image Display -->
-<div>
-  <img id="fullscreenImage" src="PG0001.jpeg" alt="Selected Page">
+<div id="imageContainer">
+  <img src="PG0001.jpeg" alt="Default Page">
 </div>
 
 <script>
@@ -187,7 +186,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // =====================================================================
   // DATASET 1: AIRCRAFT CONFIGURATIONS
-  // IF THE PDF UPDATES, YOU ONLY NEED TO CHANGE THE "pageNumber" HERE.
   // =====================================================================
   const aircraftData = {
     "320 L1": { pageNumber: 5, lavkit: 0, soap: 1 },
@@ -218,7 +216,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // =====================================================================
   // DATASET 2: FIN GROUPING
-  // Add new planes to the arrays below. The code will auto-map them!
   // =====================================================================
   const groupedFins = {
     "320 L1": [235, 236, 239, 240, 241, 401, 402, 405],
@@ -247,110 +244,162 @@ document.addEventListener('DOMContentLoaded', function() {
     "777-300HD L2": [745, 746]
   };
 
-  // Automatically unpack the grouped data into a flat database for fast searching
   const finDatabase = {};
   for (const [aircraftType, fins] of Object.entries(groupedFins)) {
-      fins.forEach(fin => {
-          finDatabase[fin] = aircraftType;
-      });
+      fins.forEach(fin => finDatabase[fin] = aircraftType);
   }
 
-  const modeSwitch = document.getElementById('modeSwitch');
-  const finDropdown = document.getElementById('finDropdown');
-  const crewDropdown = document.getElementById('crewDropdown');
-  const fullscreenImage = document.getElementById('fullscreenImage');
+  // Element References
+  const finDropdown = document.getElementById('finDropdown'); 
+  const finInput = document.getElementById('finInput'); 
+  const finList = document.getElementById('finList'); 
+  const modeToggleBtn = document.getElementById('modeToggleBtn');
+  const crewOptionsContainer = document.getElementById('crewOptionsContainer');
+  const imageContainer = document.getElementById('imageContainer');
   const infoDiv = document.getElementById('info'); 
 
-  let currentMode = "Narrow";
+  // State Variables 
+  let isTypingMode = true;
 
-  // Populate FIN options dynamically
+  // Toggle Between Dropdown and Input
+  modeToggleBtn.addEventListener('click', () => {
+    isTypingMode = !isTypingMode;
+
+    if (isTypingMode) {
+      finDropdown.style.display = 'none';
+      finInput.style.display = 'block';
+      modeToggleBtn.innerHTML = '📋'; 
+      finInput.value = ''; 
+      finInput.focus();
+    } else {
+      finInput.style.display = 'none';
+      finDropdown.style.display = 'block';
+      modeToggleBtn.innerHTML = '⌨️'; 
+      finDropdown.value = finDatabase[finInput.value] ? finInput.value : ''; 
+      populateCrewOptions(); 
+    }
+  });
+
+  // Helper function to get whichever FIN value is currently active
+  function getActiveFinValue() {
+    return isTypingMode ? finInput.value : finDropdown.value;
+  }
+
+  // Populate FIN options into BOTH the select and the datalist
   function populateFinOptions() {
     finDropdown.innerHTML = '<option value="">-- Select FIN --</option>';
+    finList.innerHTML = ''; 
+    finInput.value = ''; 
     
-    const validFins = Object.keys(finDatabase)
+    const allFins = Object.keys(finDatabase)
       .map(Number)
-      .filter(fin => (currentMode === "Narrow" && fin < 700) || (currentMode === "Wide" && fin >= 700))
       .sort((a, b) => a - b); 
 
-    validFins.forEach(fin => {
-      const aircraftType = finDatabase[fin];
-      const info = aircraftData[aircraftType];
+    allFins.forEach(fin => {
+        const optSelect = document.createElement('option');
+        optSelect.value = fin;
+        optSelect.textContent = fin;
+        finDropdown.appendChild(optSelect);
 
-      if (info) {
-        const option = document.createElement('option');
-        option.value = fin;
-        option.textContent = fin;
-        
-        option.dataset.pageNumber = info.pageNumber;
-        option.dataset.lavkit = info.lavkit;
-        option.dataset.soap = info.soap;
-        
-        finDropdown.appendChild(option);
-      }
+        const optList = document.createElement('option');
+        optList.value = fin;
+        finList.appendChild(optList);
     });
   }
 
-  // Populate Crew options
+  // Generate Crew Buttons
   function populateCrewOptions() {
-    crewDropdown.innerHTML = '<option value="">-- Select Crew --</option>';
-    if (!finDropdown.value) return;
-
-    if (currentMode === "Narrow") {
-      ["1", "2"].forEach((label, index) => {
-        const opt = document.createElement('option');
-        opt.value = index; 
-        opt.textContent = label;
-        crewDropdown.appendChild(opt);
-      });
-      crewDropdown.value = 1; // Narrow default
-
-    } else { // Wide
-      const wideOptions = [
-        "Crew 2","1/2","2/2",
-        "Crew 3","1/3","2/3","3/3",
-        "Crew 4","1/4","2/4","3/4","4/4"
-      ];
-      wideOptions.forEach((label, index) => {
-        const opt = document.createElement('option');
-        opt.value = index;
-        opt.textContent = label;
-        crewDropdown.appendChild(opt);
-      });
-      crewDropdown.value = 7; // Wide default
+    crewOptionsContainer.innerHTML = ''; // Clear old buttons
+    
+    const typedFin = getActiveFinValue();
+    if (!typedFin || !finDatabase[typedFin]) {
+        // If invalid FIN, clear images and return
+        imageContainer.innerHTML = '';
+        infoDiv.textContent = '';
+        return;
     }
 
-    updateImage();
+    const isNarrowBody = parseInt(typedFin, 10) < 700;
+    let optionsToRender = [];
+
+    if (isNarrowBody) {
+      optionsToRender = [
+        { label: "1", offsets: [0] },
+        { label: "2", offsets: [1] }
+      ];
+    } else { 
+      optionsToRender = [
+        { label: "2", offsets: [0, 1, 2] },
+        { label: "3", offsets: [3, 4, 5, 6] },
+        { label: "4", offsets: [7, 8, 9, 10, 11] }
+      ];
+    }
+
+    // Create a button for each option
+    optionsToRender.forEach((optData, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'crew-btn';
+        btn.textContent = optData.label;
+        btn.dataset.offsets = JSON.stringify(optData.offsets);
+
+        // Set Default Highlight (2 for Narrow, 4 for Wide)
+        if (isNarrowBody && index === 1) btn.classList.add('active'); 
+        if (!isNarrowBody && index === 2) btn.classList.add('active'); 
+
+        // When clicked, shift the active class and update images
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.crew-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            updateImage();
+        });
+
+        crewOptionsContainer.appendChild(btn);
+    });
+
+    updateImage(); // Auto-load images for the default selected button
   }
 
   // Update Image Logic
   function updateImage() {
-    const finOption = finDropdown.selectedOptions[0];
-    const crewIndex = crewDropdown.value;
+    const typedFin = getActiveFinValue();
+    const activeBtn = document.querySelector('.crew-btn.active');
     
-    if (!finOption || crewIndex === "") return;
+    if (!typedFin || !activeBtn || !finDatabase[typedFin]) return;
 
-    const basePage = parseInt(finOption.dataset.pageNumber, 10);
-    const finalPage = basePage + parseInt(crewIndex, 10);
-    
-    const filename = "PG" + finalPage.toString().padStart(4, "0") + ".jpeg";
-    fullscreenImage.src = filename;
+    const crewValue = activeBtn.dataset.offsets; // Get data from active button
+    const aircraftType = finDatabase[typedFin];
+    const info = aircraftData[aircraftType];
+    const basePage = parseInt(info.pageNumber, 10);
+    const offsets = JSON.parse(crewValue); 
 
-    infoDiv.textContent = `Lav Kit: ${finOption.dataset.lavkit === "1" ? 'T' : 'S'} | Soap: ${finOption.dataset.soap === "1" ? 'T' : 'S'}`;
+    // Clear the container before adding new images
+    imageContainer.innerHTML = '';
+
+    // Loop through the offsets and create an image tag for each one
+    offsets.forEach(offset => {
+      const finalPage = basePage + parseInt(offset, 10);
+      const filename = "PG" + finalPage.toString().padStart(4, "0") + ".jpeg";
+      
+      const imgElement = document.createElement('img');
+      imgElement.src = filename;
+      imgElement.alt = `Selected Page ${finalPage}`;
+      imageContainer.appendChild(imgElement);
+    });
+
+    infoDiv.textContent = `Lav Kit: ${info.lavkit === 1 ? 'T' : 'S'} | Soap: ${info.soap === 1 ? 'T' : 'S'}`;
   }
 
   // Event Listeners
-  modeSwitch.addEventListener('change', () => {
-    currentMode = modeSwitch.checked ? "Wide" : "Narrow";
-    populateFinOptions();
-    crewDropdown.innerHTML = '<option value="">-- Select Crew --</option>';
-    fullscreenImage.src = "PG0001.jpeg";
-    infoDiv.textContent = '';
+  finDropdown.addEventListener('change', populateCrewOptions);
+  finInput.addEventListener('input', populateCrewOptions); 
+
+  // Clear the input box when the user taps on it
+  finInput.addEventListener('focus', function() {
+    this.value = ''; 
+    populateCrewOptions(); 
   });
 
-  finDropdown.addEventListener('change', populateCrewOptions);
-  crewDropdown.addEventListener('change', updateImage);
-
-  // Initialize the list on page load
+  // Initialize
   populateFinOptions();
 });
 </script>
