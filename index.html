@@ -150,7 +150,7 @@
 </head>
 <body>
 
-<div class="last-updated">Last updated: April 25, 2026 (v 2.1)</div>
+<div class="last-updated">Last updated: April 25, 2026 (v 2.1.1)</div>
 
 <div class="dropdown-container">
   
@@ -178,8 +178,7 @@
 </div>
 
 <div id="imageContainer">
-  <img src="PG0001.jpeg" alt="Default Page">
-</div>
+  </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -335,18 +334,14 @@ document.addEventListener('DOMContentLoaded', function() {
       ];
     }
 
-    // Create a button for each option
-    optionsToRender.forEach((optData, index) => {
+    // Create a button for each option (None are active by default now)
+    optionsToRender.forEach((optData) => {
         const btn = document.createElement('button');
         btn.className = 'crew-btn';
         btn.textContent = optData.label;
         btn.dataset.offsets = JSON.stringify(optData.offsets);
 
-        // Set Default Highlight (2 for Narrow, 4 for Wide)
-        if (isNarrowBody && index === 1) btn.classList.add('active'); 
-        if (!isNarrowBody && index === 2) btn.classList.add('active'); 
-
-        // When clicked, shift the active class and update images
+        // When clicked, assign the active class and update images
         btn.addEventListener('click', function() {
             document.querySelectorAll('.crew-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
@@ -356,24 +351,26 @@ document.addEventListener('DOMContentLoaded', function() {
         crewOptionsContainer.appendChild(btn);
     });
 
-    updateImage(); // Auto-load images for the default selected button
+    updateImage(); // Run updateImage (will safely clear images since no button is active)
   }
 
   // Update Image Logic
   function updateImage() {
+    // Always clear the container and info block first
+    imageContainer.innerHTML = '';
+    infoDiv.textContent = '';
+
     const typedFin = getActiveFinValue();
     const activeBtn = document.querySelector('.crew-btn.active');
     
+    // Stop here if FIN is invalid OR if a crew button hasn't been clicked yet
     if (!typedFin || !activeBtn || !finDatabase[typedFin]) return;
 
-    const crewValue = activeBtn.dataset.offsets; // Get data from active button
+    const crewValue = activeBtn.dataset.offsets; 
     const aircraftType = finDatabase[typedFin];
     const info = aircraftData[aircraftType];
     const basePage = parseInt(info.pageNumber, 10);
     const offsets = JSON.parse(crewValue); 
-
-    // Clear the container before adding new images
-    imageContainer.innerHTML = '';
 
     // Loop through the offsets and create an image tag for each one
     offsets.forEach(offset => {
