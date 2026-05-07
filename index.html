@@ -150,7 +150,7 @@
 </head>
 <body>
 
-<div class="last-updated">Last updated: April 25, 2026 (v 2.1.1)</div>
+<div class="last-updated">Last updated: May 7, 2026 (v 2.1.2)</div>
 
 <div class="dropdown-container">
   
@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // =====================================================================
   // DATASET 1: AIRCRAFT CONFIGURATIONS
+  // Updated to match latest document pages
   // =====================================================================
   const aircraftData = {
     "320 L1": { pageNumber: 5, lavkit: 0, soap: 1 },
@@ -199,48 +200,53 @@ document.addEventListener('DOMContentLoaded', function() {
     "220": { pageNumber: 21, lavkit: 1, soap: 1 },
     "737-8 Max23": { pageNumber: 23, lavkit: 1, soap: 1 },
     "737-8 Max Uplift": { pageNumber: 25, lavkit: 1, soap: 1 },
-    "R319": { pageNumber: 30, lavkit: 0, soap: 1 },
-    "R320": { pageNumber: 32, lavkit: 0, soap: 1 },
-    "R321": { pageNumber: 34, lavkit: 0, soap: 1 },
-    "R737-8 Max": { pageNumber: 36, lavkit: 1, soap: 1 },
-    "A330-300 Dream": { pageNumber: 38, lavkit: 1, soap: 0 },
-    "A330-300 L2": { pageNumber: 50, lavkit: 1, soap: 1 },
-    "787-8": { pageNumber: 62, lavkit: 1, soap: 0 },
-    "787-9": { pageNumber: 74, lavkit: 1, soap: 0 },
-    "777-200LR": { pageNumber: 98, lavkit: 1, soap: 1 },
-    "777-300ER": { pageNumber: 110, lavkit: 1, soap: 1 },
-    "777-300HD": { pageNumber: 122, lavkit: 1, soap: 1 },
-    "777-300HD L2": { pageNumber: 134, lavkit: 1, soap: 1 }
+    "321 XLR": { pageNumber: 27, lavkit: 0, soap: 1 },
+    "R319": { pageNumber: 29, lavkit: 0, soap: 1 },
+    "R320": { pageNumber: 31, lavkit: 0, soap: 1 },
+    "R321": { pageNumber: 33, lavkit: 0, soap: 1 },
+    "R737-8 Max": { pageNumber: 35, lavkit: 1, soap: 1 },
+    "A330-300 Dream": { pageNumber: 37, lavkit: 1, soap: 0 },
+    "A330-300 L2": { pageNumber: 49, lavkit: 1, soap: 1 },
+    "787-8": { pageNumber: 61, lavkit: 1, soap: 0 },
+    "787-9": { pageNumber: 73, lavkit: 1, soap: 0 },
+    "787-10": { pageNumber: 85, lavkit: 1, soap: 0 },
+    "777-200LR": { pageNumber: 97, lavkit: 1, soap: 1 },
+    "777-300ER": { pageNumber: 109, lavkit: 1, soap: 1 },
+    "777-300HD": { pageNumber: 121, lavkit: 1, soap: 1 },
+    "777-300HD L2": { pageNumber: 133, lavkit: 1, soap: 1 }
   };
 
   // =====================================================================
   // DATASET 2: FIN GROUPING
+  // Updated to reflect new reassignments
   // =====================================================================
   const groupedFins = {
-    "320 L1": [235, 236, 239, 240, 241, 401, 402, 405],
+    "320 L1": [235, 236, 240, 241, 401, 402, 405],
     "320 L2": [417, 418, 419, 420],
     "320 L3": [421, 422],
-    "320 Dream Cabin Lite": [237, 242],
+    "320 Dream Cabin Lite": [237, 239, 242], 
     "320 Dream Cabin Lite (Alt)": [238], 
     "320 Jetz": [225, 226, 232, 416],
     "321 L2": [465, 466, 467, 483, 484],
     "321 Dream": [451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 473],
     "321 Glowing Hearted": [468],
     "220": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142],
-    "737-8 Max23": [505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 521, 522, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545],
+    "737-8 Max23": [505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 521, 522, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545],
     "737-8 Max Uplift": [571, 573, 574, 575, 576, 577, 578],
+    "321 XLR": [301],
     "R319": [255, 256, 257, 259, 262, 263, 272, 276, 277, 278, 279, 281, 283, 284, 286, 287, 290],
     "R320": [243, 244, 245, 246, 247],
     "R321": [469, 470, 471, 472, 474, 475, 476, 477, 478, 479, 480, 481, 482],
-    "R737-8 Max": [501, 502, 503, 504, 519, 520, 523],
-    "A330-300 Dream": [931, 932, 933, 934, 935, 936, 937, 938, 939, 941, 942, 943, 944, 945, 946, 947, 948],
+    "R737-8 Max": [501, 502, 503, 504, 519, 520, 523, 524],
+    "A330-300 Dream": [931, 932, 933, 934, 935, 936, 937, 938, 939, 940, 941, 942, 943, 944, 945, 946, 947, 948],
     "A330-300 L2": [949, 950],
     "787-8": [801, 802, 803, 804, 805, 806, 807, 808],
     "787-9": [831, 832, 833, 834, 835, 836, 837, 838, 839, 840, 841, 842, 843, 844, 845, 846, 847, 848, 849, 850, 851, 852, 853, 854, 855, 856, 857, 858, 859, 860, 861, 862],
+    "787-10": [], // Ready for future fleet
     "777-200LR": [701, 702, 703, 704, 705, 706],
     "777-300ER": [731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742],
-    "777-300HD": [743, 744, 747, 748, 749],
-    "777-300HD L2": [745, 746]
+    "777-300HD": [749],
+    "777-300HD L2": [743, 744, 745, 746, 747, 748]
   };
 
   const finDatabase = {};
@@ -334,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
       ];
     }
 
-    // Create a button for each option (None are active by default now)
+    // Create a button for each option (None are active by default)
     optionsToRender.forEach((optData) => {
         const btn = document.createElement('button');
         btn.className = 'crew-btn';
@@ -351,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
         crewOptionsContainer.appendChild(btn);
     });
 
-    updateImage(); // Run updateImage (will safely clear images since no button is active)
+    updateImage(); // Safely clear images since no button is active initially
   }
 
   // Update Image Logic
