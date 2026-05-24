@@ -1,1 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIN Crew Selector</title>
+<style>
+  /* High-contrast, dark-themed styling with mobile-optimized text */
+  body { 
+    font-family: Arial, sans-serif; 
+    text-align: center; 
+    margin: 0;
+    padding: 50px 15px 20px 15px; 
+    background-color: #121212;
+    color: #ffffff;
+    font-size: 18px;
+  }
+
+  /* Last Updated Text in Top Right Corner */
+  .last-updated {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 12px;
+    color: #888;
+  }
+
+  /* Mobile-First Dropdown Layout */
+  .dropdown-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: stretch;
+    gap: 20px;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    border: 1px solid #333;
+    max-width: 500px;
+    margin: 0 auto 20px auto;
+  }
+
+  /* Input Groups inside Container */
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    width: 100%;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #ccc;
+  }
+
+  /* Wrapper to hold dropdown/input and toggle button side-by-side */
+  .fin-wrapper {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+  }
+
+  /* Fat dropdowns and inputs for easy tapping */
+  select, input[type="tel"] { 
+    flex-grow: 1; 
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px; 
+    font-size: 18px; 
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border: 1px solid #555;
+    border-radius: 8px;
+  }
+  
+  select {
+    appearance: none; 
+  }
+
+  /* Toggle Mode Button */
+  #modeToggleBtn {
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 0 12px; 
+    font-size: 34px; 
+    line-height: 1; 
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+
+  #modeToggleBtn:active {
+    background-color: #555;
+  }
+
+  /* Crew Button Options (Replaces Dropdown) */
+  .crew-options-container {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .crew-btn {
+    flex: 1; /* Makes buttons take up equal space */
+    padding: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border: 1px solid #555;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+  }
+
+  .crew-btn.active {
+    background-color: #4CAF50; /* Green highlight for selected */
+    border-color: #4CAF50;
+    color: #ffffff;
+  }
+
+  /* Image Display Container (Stacks multiple images now) */
+  #imageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; 
+  }
+
+  img { 
+    max-width: 100%; 
+    border: 2px solid #444; 
+    border-radius: 8px;
+  }
+
+  #info {
+    margin-top: 5px; 
+    font-weight: bold;
+    font-size: 22px;
+    color: #4CAF50;
+    text-align: center;
+    width: 100%;
+  }
+</style>
+</head>
+<body>
+
+<div class="last-updated">Last updated: May 21, 2026 (v 3.2)</div>
+
+<div class="dropdown-container">
+  
+  <div class="input-group">
+    <label>Aircraft FIN:</label>
+    <div class="fin-wrapper">
+      <select id="finDropdown" style="display: none;">
+        <option value="">-- Select FIN --</option>
+      </select>
+
+      <input type="tel" id="finInput" list="finList" placeholder="Tap to type..." maxlength="3">
+      <datalist id="finList"></datalist>
+
+      <button id="modeToggleBtn" type="button" title="Toggle Mode">📋</button>
+    </div>
+  </div>
+
+  <div class="input-group">
+    <label>Crew Size:</label>
+    <div id="crewOptionsContainer" class="crew-options-container">
+      </div>
+  </div>
+
+  <div id="info"></div>
+</div>
+
+<div id="imageContainer">
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // =====================================================================
+  // DATASET 1: AIRCRAFT CONFIGURATIONS
+  // Updated to match latest document pages
+  // =====================================================================
+  const aircraftData = {
+    "320 L1": { pageNumber: 5, lavkit: 0, soap: 1 },
+    "320 L2": { pageNumber: 7, lavkit: 0, soap: 1 },
+    "320 L3": { pageNumber: 9, lavkit: 0, soap: 1 }, 
+    "320 Dream Cabin Lite": { pageNumber: 11, lavkit: 0, soap: 1 },
+    "320 Dream Cabin Lite (Alt)": { pageNumber: 11, lavkit: 1, soap: 0 }, 
+    "320 Jetz": { pageNumber: 13, lavkit: 0, soap: 1 },
+    "321 L2": { pageNumber: 15, lavkit: 0, soap: 1 },
+    "321 Dream": { pageNumber: 17, lavkit: 0, soap: 1 },
+    "321 Glowing Hearted": { pageNumber: 19, lavkit: 0, soap: 1 },
+    "220": { pageNumber: 21, lavkit: 1, soap: 1 },
+    "737-8 Max23": { pageNumber: 23, lavkit: 1, soap: 1 },
+    "737-8 Max Uplift": { pageNumber: 25, lavkit: 1, soap: 1 },
+    "321 XLR": { pageNumber: 27, lavkit: 0, soap: 1 },
+    "R319": { pageNumber: 29, lavkit: 0, soap: 1 },
+    "R320": { pageNumber: 31, lavkit: 0, soap: 1 },
+    "R321": { pageNumber: 33, lavkit: 0, soap: 1 },
+    "R737-8 Max": { pageNumber: 35, lavkit: 1, soap: 1 },
+    "A330-300 Dream": { pageNumber: 37, lavkit: 1, soap: 0 },
+    "A330-300 L2": { pageNumber: 49, lavkit: 1, soap: 1 },
+    "787-8": { pageNumber: 61, lavkit: 1, soap: 0 },
+    "787-9": { pageNumber: 73, lavkit: 1, soap: 0 },
+    "787-10": { pageNumber: 85, lavkit: 1, soap: 0 },
+    "777-200LR": { pageNumber: 97, lavkit: 1, soap: 1 },
+    "777-300ER": { pageNumber: 109, lavkit: 1, soap: 1 },
+    "777-300HD": { pageNumber: 121, lavkit: 1, soap: 1 },
+    "777-300HD L2": { pageNumber: 133, lavkit: 1, soap: 1 }
+  };
+
+  // =====================================================================
+  // DATASET 2: FIN GROUPING
+  // Updated to reflect new reassignments
+  // =====================================================================
+  const groupedFins = {
+    "320 L1": [235, 240, 241, 401, 405],
+    "320 L2": [417, 418, 419, 420],
+    "320 L3": [421, 422],
+    "320 Dream Cabin Lite": [236, 237, 239, 242], 
+    "320 Dream Cabin Lite (Alt)": [238], 
+    "320 Jetz": [225, 226, 232, 416],
+    "321 L2": [465, 466, 467, 483, 484],
+    "321 Dream": [451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 473],
+    "321 Glowing Hearted": [468],
+    "220": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142],
+    "737-8 Max23": [505, 507, 508, 509, 510, 512, 513, 514, 515, 516, 517, 518, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545],
+    "737-8 Max Uplift": [571, 573, 574, 575, 576, 577, 578],
+    "321 XLR": [301],
+    "R319": [255, 256, 257, 259, 262, 263, 272
 
