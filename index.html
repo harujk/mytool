@@ -6,36 +6,95 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FIN Crew Selector</title>
 <style>
-  /* High-contrast, dark-themed styling with mobile-optimized text */
+  /* Festive dark pine theme with mobile-optimized text */
   body { 
     font-family: Arial, sans-serif; 
     text-align: center; 
     margin: 0;
-    padding: 50px 15px 20px 15px; 
-    background-color: #121212;
+    padding: 55px 15px 20px 15px; 
+    background-color: #0d1712;
+    background-image: radial-gradient(circle at 50% 0%, #1a3326 0%, #0d1712 75%);
     color: #ffffff;
     font-size: 18px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Thin Candy Cane Stripe at the very top */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: repeating-linear-gradient(
+      45deg,
+      #c62828,
+      #c62828 12px,
+      #ffffff 12px,
+      #ffffff 24px,
+      #2e7d32 24px,
+      #2e7d32 36px,
+      #ffd54f 36px,
+      #ffd54f 48px
+    );
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Non-intrusive Falling Snowflakes */
+  .snow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Never blocks clicks or taps */
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .snowflake {
+    position: absolute;
+    top: -20px;
+    color: rgba(255, 255, 255, 0.25);
+    user-select: none;
+    animation: snowfall linear infinite;
+  }
+
+  @keyframes snowfall {
+    0% { transform: translateY(-20px) translateX(0) rotate(0deg); }
+    50% { transform: translateY(50vh) translateX(12px) rotate(180deg); }
+    100% { transform: translateY(105vh) translateX(-12px) rotate(360deg); }
   }
 
   /* Last Updated Text in Top Right Corner */
   .last-updated {
     position: absolute;
-    top: 15px;
+    top: 16px;
     right: 15px;
     font-size: 12px;
-    color: #888;
+    color: #a5b8ad;
+    z-index: 2;
   }
 
-  /* Mobile-First Dropdown Layout */
+  /* Mobile-First Dropdown Layout with Holiday Border */
   .dropdown-container {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column; 
     align-items: stretch;
     gap: 20px;
     padding: 20px;
-    background-color: #1e1e1e;
+    background-color: rgba(22, 36, 29, 0.92);
     border-radius: 12px;
-    border: 1px solid #333;
+    border: 1px solid #3a5a46;
+    border-top: 3px solid #c62828;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 12px rgba(212, 175, 55, 0.08);
     max-width: 500px;
     margin: 0 auto 20px auto;
   }
@@ -52,7 +111,7 @@
     font-weight: bold;
     margin-bottom: 8px;
     font-size: 16px;
-    color: #ccc;
+    color: #f3e5ab; /* Soft warm gold */
   }
 
   /* Wrapper to hold dropdown/input and toggle button side-by-side */
@@ -69,10 +128,17 @@
     box-sizing: border-box;
     padding: 14px; 
     font-size: 18px; 
-    background-color: #2c2c2c;
+    background-color: #1f3328;
     color: #ffffff;
-    border: 1px solid #555;
+    border: 1px solid #4a6b58;
     border-radius: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  select:focus, input[type="tel"]:focus {
+    outline: none;
+    border-color: #ffd54f;
+    box-shadow: 0 0 6px rgba(255, 213, 79, 0.35);
   }
   
   select {
@@ -81,9 +147,9 @@
 
   /* Toggle Mode Button */
   #modeToggleBtn {
-    background-color: #333;
+    background-color: #294234;
     color: white;
-    border: 1px solid #555;
+    border: 1px solid #4a6b58;
     border-radius: 8px;
     padding: 0 12px; 
     font-size: 34px; 
@@ -96,7 +162,7 @@
   }
 
   #modeToggleBtn:active {
-    background-color: #555;
+    background-color: #3b5c49;
   }
 
   /* Crew Button Options (Replaces Dropdown) */
@@ -111,22 +177,25 @@
     padding: 14px;
     font-size: 18px;
     font-weight: bold;
-    background-color: #2c2c2c;
+    background-color: #1f3328;
     color: #ffffff;
-    border: 1px solid #555;
+    border: 1px solid #4a6b58;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s, border-color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
   }
 
   .crew-btn.active {
-    background-color: #4CAF50; /* Green highlight for selected */
-    border-color: #4CAF50;
+    background: linear-gradient(135deg, #c62828, #2e7d32); /* Holiday Red-to-Green */
+    border-color: #ffd54f;
+    box-shadow: 0 0 10px rgba(255, 213, 79, 0.35);
     color: #ffffff;
   }
 
   /* Image Display Container (Stacks multiple images now) */
   #imageContainer {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -135,15 +204,17 @@
 
   img { 
     max-width: 100%; 
-    border: 2px solid #444; 
+    border: 2px solid #3a5a46; 
     border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   }
 
   #info {
     margin-top: 5px; 
     font-weight: bold;
     font-size: 22px;
-    color: #4CAF50;
+    color: #ffd54f; /* Warm festive gold */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
     text-align: center;
     width: 100%;
   }
@@ -151,13 +222,23 @@
 </head>
 <body>
 
-<div class="last-updated">Last updated: October 24, 2026 (v4.7)</div>
+<!-- Subtle Background Snowflakes -->
+<div class="snow-container" aria-hidden="true">
+  <span class="snowflake" style="left: 7%; animation-duration: 12s; animation-delay: 0s; font-size: 14px;">❄</span>
+  <span class="snowflake" style="left: 22%; animation-duration: 15s; animation-delay: 3s; font-size: 18px;">❅</span>
+  <span class="snowflake" style="left: 38%; animation-duration: 11s; animation-delay: 1.5s; font-size: 12px;">❆</span>
+  <span class="snowflake" style="left: 55%; animation-duration: 16s; animation-delay: 4s; font-size: 16px;">❄</span>
+  <span class="snowflake" style="left: 73%; animation-duration: 13s; animation-delay: 2s; font-size: 14px;">❅</span>
+  <span class="snowflake" style="left: 90%; animation-duration: 14s; animation-delay: 5s; font-size: 17px;">❆</span>
+</div>
+
+<div class="last-updated">❄️ Last updated: November 5, 2026 (v4.8)</div>
 
 <div class="dropdown-container">
   
   <!-- FIN Selection Area -->
   <div class="input-group">
-    <label>Aircraft FIN:</label>
+    <label>🎄 Aircraft FIN:</label>
     <div class="fin-wrapper">
       <!-- Scrolling Mode (Hidden by Default) -->
       <select id="finDropdown" style="display: none;">
@@ -175,7 +256,7 @@
 
   <!-- Crew Selection Area -->
   <div class="input-group">
-    <label>Crew Size:</label>
+    <label>🎅 Crew Size:</label>
     <div id="crewOptionsContainer" class="crew-options-container">
       <!-- Buttons are generated here automatically -->
     </div>
@@ -194,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // =====================================================================
   // DATASET 1: AIRCRAFT CONFIGURATIONS
-  // Updated to match latest document pages
+  // Updated to match v4.8 page shifts (Mainline MAX removed)
   // =====================================================================
   const aircraftData = {
     "320 L1": { pageNumber: 5, lavkit: 0, soap: 1 },
@@ -207,45 +288,43 @@ document.addEventListener('DOMContentLoaded', function() {
     "321 Dream": { pageNumber: 17, lavkit: 0, soap: 1 },
     "321 Glowing Hearted": { pageNumber: 19, lavkit: 0, soap: 1 },
     "220": { pageNumber: 21, lavkit: 1, soap: 1 },
-    "737-8 Max23": { pageNumber: 23, lavkit: 1, soap: 1 },
-    "737-8 Max Uplift": { pageNumber: 25, lavkit: 1, soap: 1 },
-    "321 XLR": { pageNumber: 27, lavkit: 1, soap: 1 },
-    "R319": { pageNumber: 29, lavkit: 0, soap: 1 },
-    "R320": { pageNumber: 31, lavkit: 0, soap: 1 },
-    "R321": { pageNumber: 33, lavkit: 0, soap: 1 },
-    "R737-8 Max": { pageNumber: 35, lavkit: 1, soap: 1 },
-    "A330-300 Dream": { pageNumber: 37, lavkit: 1, soap: 0 },
-    "A330-300 L2": { pageNumber: 49, lavkit: 1, soap: 0 },
-    "787-8": { pageNumber: 61, lavkit: 1, soap: 0 },
-    "787-9": { pageNumber: 73, lavkit: 1, soap: 0 },
-    "787-10": { pageNumber: 85, lavkit: 1, soap: 0 },
-    "777-200LR": { pageNumber: 97, lavkit: 1, soap: 1 },
-    "777-300ER": { pageNumber: 109, lavkit: 1, soap: 1 },
-    "777-300HD L2": { pageNumber: 121, lavkit: 1, soap: 1 }
+    "737-8 Max Uplift": { pageNumber: 23, lavkit: 1, soap: 1 },
+    "321 XLR": { pageNumber: 25, lavkit: 1, soap: 1 },
+    "R319": { pageNumber: 27, lavkit: 0, soap: 1 },
+    "R320": { pageNumber: 29, lavkit: 0, soap: 1 },
+    "R321": { pageNumber: 31, lavkit: 0, soap: 1 },
+    "R737-8 Max": { pageNumber: 33, lavkit: 1, soap: 1 },
+    "A330-300 Dream": { pageNumber: 35, lavkit: 1, soap: 0 },
+    "A330-300 L2": { pageNumber: 47, lavkit: 1, soap: 0 },
+    "787-8": { pageNumber: 59, lavkit: 1, soap: 0 },
+    "787-9": { pageNumber: 71, lavkit: 1, soap: 0 },
+    "787-10": { pageNumber: 83, lavkit: 1, soap: 0 },
+    "777-200LR": { pageNumber: 95, lavkit: 1, soap: 1 },
+    "777-300ER": { pageNumber: 107, lavkit: 1, soap: 1 },
+    "777-300HD L2": { pageNumber: 119, lavkit: 1, soap: 1 }
   };
 
   // =====================================================================
   // DATASET 2: FIN GROUPING
-  // Updated to reflect v4.7 fleet reassignments
+  // Updated to reflect v4.8 fleet reassignments
   // =====================================================================
   const groupedFins = {
-    "320 L1": [235, 240, 401],
+    "320 L1": [235, 401],
     "320 L2": [417, 418, 419, 420],
     "320 L3": [422],
-    "320 Dream Cabin Lite": [236, 237, 238, 239, 242], 
+    "320 Dream Cabin Lite": [236, 237, 239, 240, 242], 
     "320 Dream Cabin Lite (Alt)": [238], 
     "320 Jetz": [225, 226, 232, 241, 416],
-    "321 L2": [466, 484],
+    "321 L2": [484],
     "321 Dream": [451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 473],
-    "321 Glowing Hearted": [465, 467, 468, 483],
-    "220": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151],
-    "737-8 Max23": [542, 543],
+    "321 Glowing Hearted": [465, 466, 467, 468, 472, 483],
+    "220": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 153, 154],
     "737-8 Max Uplift": [571, 573, 574, 575, 576, 577, 578],
-    "321 XLR": [301, 302, 303, 304],
-    "R319": [255, 256, 257, 259, 262, 263, 287],
+    "321 XLR": [301, 302, 303, 304, 308],
+    "R319": [262, 263, 287],
     "R320": [243, 244, 245, 246, 247],
-    "R321": [469, 470, 471, 472, 474, 475, 476, 477, 478, 479, 480, 481, 482],
-    "R737-8 Max": [501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 544, 545],
+    "R321": [469, 470, 471, 474, 475, 476, 477, 478, 479, 480, 481, 482],
+    "R737-8 Max": [501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545],
     "A330-300 Dream": [931, 932, 933, 934, 935, 936, 937, 938, 939, 940, 941, 942, 943, 944, 945, 946, 947, 948],
     "A330-300 L2": [949, 950],
     "787-8": [801, 802, 803, 804, 805, 806, 807, 808],
@@ -396,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function() {
       imageContainer.appendChild(imgElement);
     });
 
-    infoDiv.textContent = `Lav Kit: ${info.lavkit === 1 ? 'T' : 'S'} | Soap: ${info.soap === 1 ? 'T' : 'S'}`;
+    infoDiv.textContent = `🎁 Lav Kit: ${info.lavkit === 1 ? 'T' : 'S'} | Soap: ${info.soap === 1 ? 'T' : 'S'} ✨`;
   }
 
   // Event Listeners
